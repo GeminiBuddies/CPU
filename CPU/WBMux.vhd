@@ -1,41 +1,27 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    20:49:23 11/30/2018 
--- Design Name: 
--- Module Name:    WBMux - WBMuxX 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.all;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity WBMux is
+	port(
+		output: out std_logic_vector(15 downto 0);
+		memdata: in std_logic_vector(15 downto 0);
+		aludata: in std_logic_vector(15 downto 0);
+		mem_or_alu: in std_logic -- '1' = mem
+	);
 end WBMux;
 
 architecture WBMuxX of WBMux is
-
 begin
-
-
+	process(memdata, aludata)
+	begin
+		if mem_or_alu = '1' then
+			output <= memdata;
+		else
+			output <= aludata;
+		end if;
+	end process;
 end WBMuxX;
 
