@@ -37,6 +37,7 @@ entity Controller is
            MemRead : out  STD_LOGIC;
            MemWrite : out  STD_LOGIC;
            WriteReg : out  STD_LOGIC;
+			  UsePc : out STD_LOGIC;
 			  Reg1Choose : out STD_LOGIC_VECTOR (2 downto 0);
 			  ImmChoose : out STD_LOGIC_VECTOR (2 downto 0);
 			  RegDstChoose : out STD_LOGIC_VECTOR (2 downto 0);
@@ -63,6 +64,7 @@ begin
 			WriteReg <= '1';
 			MemOrAlu <= '0';
 			HazardKind <= "11";
+			UsePc <= '0';
 		when "01000" =>	--ADDIU3
 			SignExtend <= '1';
 			Reg1Choose <= "110";
@@ -75,6 +77,7 @@ begin
 			WriteReg <= '1';
 			MemOrAlu <= '0';
 			HazardKind <= "11";
+			UsePc <= '0';
 		when "01100" =>
 			case Instruction(10 downto 8) is
 				when "011" =>	--ADDSP
@@ -89,6 +92,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when "000" =>	--BTEQZ
 					SignExtend <= '1';
 					Reg1Choose <= "011";
@@ -101,6 +105,7 @@ begin
 					WriteReg <= '0';
 					MemOrAlu <= '0';	
 					HazardKind <= "01";
+					UsePc <= '0';
 				when "100" =>	--MTSP
 					SignExtend <= '1';
 					Reg1Choose <= "110";
@@ -113,6 +118,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when others =>
 			end case;
 		when "11100" =>
@@ -129,6 +135,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when "11" =>	--SUBU
 					SignExtend <= '1';
 					Reg1Choose <= "110";
@@ -141,6 +148,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when others =>
 			end case;
 		when "11101" =>
@@ -157,6 +165,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when "01010" =>	--CMP
 					SignExtend <= '1';
 					Reg1Choose <= "110";
@@ -169,6 +178,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when "00000" =>
 					case Instruction(7 downto 5) is
 						when "000" =>	--JR
@@ -183,9 +193,10 @@ begin
 							WriteReg <= '0';
 							MemOrAlu <= '0';
 							HazardKind <= "10";
+							UsePc <= '0';
 						when "010" =>	--MFPC
 							SignExtend <= '1';
-							Reg1Choose <= "100";
+							Reg1Choose <= "111";
 							ImmChoose <= "111";
 							RegDstChoose <= "110";
 							ImmOrReg2 <= '1';
@@ -195,9 +206,10 @@ begin
 							WriteReg <= '1';
 							MemOrAlu <= '0';
 							HazardKind <= "11";
+							UsePc <= '1';
 						when "110" =>	--JALR
 							SignExtend <= '1';
-							Reg1Choose <= "110";
+							Reg1Choose <= "111";
 							ImmChoose <= "111";
 							RegDstChoose <= "010";
 							ImmOrReg2 <= '1';
@@ -207,6 +219,7 @@ begin
 							WriteReg <= '0';
 							MemOrAlu <= '0';
 							HazardKind <= "10";
+							UsePc <= '1';
 						when "001" =>	--JRRA
 							SignExtend <= '1';
 							Reg1Choose <= "010";
@@ -219,6 +232,7 @@ begin
 							WriteReg <= '0';
 							MemOrAlu <= '0';
 							HazardKind <= "10";
+							UsePc <= '0';
 						when others =>
 					end case;
 				when "01101" =>	--OR
@@ -233,6 +247,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when "00011" => 	--SLTU
 					SignExtend <= '1';
 					Reg1Choose <= "110";
@@ -245,6 +260,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when others =>
 			end case;
 		when "00010" =>	--B
@@ -259,6 +275,7 @@ begin
 			WriteReg <= '0';
 			MemOrAlu <= '0';
 			HazardKind <= "01";
+			UsePc <= '0';
 		when "00100" =>	--BEQZ
 			SignExtend <= '1';
 			Reg1Choose <= "110";
@@ -271,6 +288,7 @@ begin
 			WriteReg <= '0';
 			MemOrAlu <= '0';
 			HazardKind <= "01";
+			UsePc <= '0';
 		when "00101" =>	--BNEZ
 			SignExtend <= '1';
 			Reg1Choose <= "110";
@@ -283,6 +301,7 @@ begin
 			WriteReg <= '0';
 			MemOrAlu <= '0';
 			HazardKind <= "01";
+			UsePc <= '0';
 		when "01101" => 	--LI
 			SignExtend <= '0';
 			Reg1Choose <= "111";
@@ -295,6 +314,7 @@ begin
 			WriteReg <= '1';
 			MemOrAlu <= '0';
 			HazardKind <= "11";
+			UsePc <= '0';
 		when "10011" =>	--LW
 			SignExtend <= '1';
 			Reg1Choose <= "110";
@@ -307,6 +327,7 @@ begin
 			WriteReg <= '1';
 			MemOrAlu <= '1';
 			HazardKind <= "00";
+			UsePc <= '0';
 		when "10010" =>	--LW_SP
 			SignExtend <= '1';
 			Reg1Choose <= "000";
@@ -319,6 +340,7 @@ begin
 			WriteReg <= '1';
 			MemOrAlu <= '1';
 			HazardKind <= "00";
+			UsePc <= '0';
 		when "11110" =>
 			if Instruction(0)='0' then	--MFIH
 				SignExtend <= '1';
@@ -331,7 +353,8 @@ begin
 				MemWrite <= '0';
 				WriteReg <= '1';
 				MemOrAlu <= '0';
-				HazardKind <= "11";				
+				HazardKind <= "11";	
+				UsePc <= '0';
 			else	--MTIH
 				SignExtend <= '1';
 				Reg1Choose <= "110";
@@ -344,6 +367,7 @@ begin
 				WriteReg <= '1';
 				MemOrAlu <= '0';	
 				HazardKind <= "11";
+				UsePc <= '0';
 			end if;
 		when "00001" =>	--NOP
 			SignExtend <= '1';
@@ -357,6 +381,7 @@ begin
 			WriteReg <= '0';
 			MemOrAlu <= '0';
 			HazardKind <= "11";
+			UsePc <= '0';
 		when "00110" =>
 			case Instruction(1 downto 0) is
 				when "00" =>	--SLL
@@ -370,7 +395,8 @@ begin
 					MemWrite <= '0';
 					WriteReg <= '1';
 					MemOrAlu <= '0';
-					HazardKind <= "11";					
+					HazardKind <= "11";	
+					UsePc <= '0';		
 				when "11" =>	--SRA
 					SignExtend <= '0';
 					Reg1Choose <= "101";
@@ -383,6 +409,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when "10" =>	--SRL
 					SignExtend <= '0';
 					Reg1Choose <= "101";
@@ -395,6 +422,7 @@ begin
 					WriteReg <= '1';
 					MemOrAlu <= '0';
 					HazardKind <= "11";
+					UsePc <= '0';
 				when others =>
 			end case;
 		when "11011" =>	--SW
@@ -409,6 +437,7 @@ begin
 			WriteReg <= '0';
 			MemOrAlu <= '0';
 			HazardKind <= "11";
+			UsePc <= '0';
 		when "11010" =>	--SW_SP
 			SignExtend <= '1';
 			Reg1Choose <= "000";
@@ -421,6 +450,7 @@ begin
 			WriteReg <= '0';
 			MemOrAlu <= '0';
 			HazardKind <= "11";
+			UsePc <= '0';
 		when "01010" => 	--SLTI
 			SignExtend <= '1';
 			Reg1Choose <= "110";
@@ -433,6 +463,7 @@ begin
 			WriteReg <= '1';
 			MemOrAlu <= '0';
 			HazardKind <= "11";
+			UsePc <= '0';
 		when others =>
 	end case;
 end process;
