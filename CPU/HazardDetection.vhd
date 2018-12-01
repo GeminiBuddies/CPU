@@ -90,6 +90,7 @@ case HazardKind is
 		IDEXEFlush <= '0';
 		IFIDFlush <= '0';
 		PCChoose <= "00";	
+	when others =>
 end case;
 
 end process;

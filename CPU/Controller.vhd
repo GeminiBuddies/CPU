@@ -39,6 +39,7 @@ entity Controller is
            WriteReg : out  STD_LOGIC;
 			  UsePc : out STD_LOGIC;
 			  Reg1Choose : out STD_LOGIC_VECTOR (2 downto 0);
+			  Reg2Choose : out STD_LOGIC;
 			  ImmChoose : out STD_LOGIC_VECTOR (2 downto 0);
 			  RegDstChoose : out STD_LOGIC_VECTOR (2 downto 0);
 			  HazardKind : out STD_LOGIC_VECTOR(1 downto 0);
@@ -55,6 +56,7 @@ begin
 		when "01001" =>	--ADDIU
 			SignExtend <= '1';
 			Reg1Choose <= "110";
+			Reg2Choose <= '1';
 			ImmChoose <= "001";
 			RegDstChoose <= "110";
 			ImmOrReg2 <= '1';
@@ -68,6 +70,7 @@ begin
 		when "01000" =>	--ADDIU3
 			SignExtend <= '1';
 			Reg1Choose <= "110";
+			Reg2Choose <= '1';
 			ImmChoose <= "100";
 			RegDstChoose <= "101";
 			ImmOrReg2 <= '1';
@@ -83,6 +86,7 @@ begin
 				when "011" =>	--ADDSP
 					SignExtend <= '1';
 					Reg1Choose <= "000";
+					Reg2Choose <= '1';
 					ImmChoose <= "001";
 					RegDstChoose <= "000";
 					ImmOrReg2 <= '1';
@@ -96,6 +100,7 @@ begin
 				when "000" =>	--BTEQZ
 					SignExtend <= '1';
 					Reg1Choose <= "011";
+					Reg2Choose <= '1';
 					ImmChoose <= "001";
 					RegDstChoose <= "111";
 					ImmOrReg2 <= '1';
@@ -108,7 +113,8 @@ begin
 					UsePc <= '0';
 				when "100" =>	--MTSP
 					SignExtend <= '1';
-					Reg1Choose <= "110";
+					Reg1Choose <= "101";
+					Reg2Choose <= '1';
 					ImmChoose <= "111";
 					RegDstChoose <= "000";
 					ImmOrReg2 <= '1';
@@ -126,6 +132,7 @@ begin
 				when "01" =>	--ADDU
 					SignExtend <= '1';
 					Reg1Choose <= "110";
+					Reg2Choose <= '1';
 					ImmChoose <= "111";
 					RegDstChoose <= "100";
 					ImmOrReg2 <= '0';
@@ -139,6 +146,7 @@ begin
 				when "11" =>	--SUBU
 					SignExtend <= '1';
 					Reg1Choose <= "110";
+					Reg2Choose <= '1';
 					ImmChoose <= "111";
 					RegDstChoose <= "000";
 					ImmOrReg2 <= '0';
@@ -156,6 +164,7 @@ begin
 				when "01100" =>	--AND
 					SignExtend <= '1';
 					Reg1Choose <= "110";
+					Reg2Choose <= '1';
 					ImmChoose <= "111";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '0';
@@ -169,6 +178,7 @@ begin
 				when "01010" =>	--CMP
 					SignExtend <= '1';
 					Reg1Choose <= "110";
+					Reg2Choose <= '1';
 					ImmChoose <= "111";
 					RegDstChoose <= "011";
 					ImmOrReg2 <= '0';
@@ -184,6 +194,7 @@ begin
 						when "000" =>	--JR
 							SignExtend <= '1';
 							Reg1Choose <= "110";
+							Reg2Choose <= '1';
 							ImmChoose <= "111";
 							RegDstChoose <= "111";
 							ImmOrReg2 <= '1';
@@ -197,6 +208,7 @@ begin
 						when "010" =>	--MFPC
 							SignExtend <= '1';
 							Reg1Choose <= "111";
+							Reg2Choose <= '1';
 							ImmChoose <= "111";
 							RegDstChoose <= "110";
 							ImmOrReg2 <= '1';
@@ -210,6 +222,7 @@ begin
 						when "110" =>	--JALR
 							SignExtend <= '1';
 							Reg1Choose <= "111";
+							Reg2Choose <= '1';
 							ImmChoose <= "111";
 							RegDstChoose <= "010";
 							ImmOrReg2 <= '1';
@@ -223,6 +236,7 @@ begin
 						when "001" =>	--JRRA
 							SignExtend <= '1';
 							Reg1Choose <= "010";
+							Reg2Choose <= '1';
 							ImmChoose <= "111";
 							RegDstChoose <= "111";
 							ImmOrReg2 <= '1';
@@ -238,6 +252,7 @@ begin
 				when "01101" =>	--OR
 					SignExtend <= '1';
 					Reg1Choose <= "110";
+					Reg2Choose <= '1';
 					ImmChoose <= "111";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '0';
@@ -251,6 +266,7 @@ begin
 				when "00011" => 	--SLTU
 					SignExtend <= '1';
 					Reg1Choose <= "110";
+					Reg2Choose <= '1';
 					ImmChoose <= "111";
 					RegDstChoose <= "011";
 					ImmOrReg2 <= '0';
@@ -266,6 +282,7 @@ begin
 		when "00010" =>	--B
 			SignExtend <= '1';
 			Reg1Choose <= "111";
+			Reg2Choose <= '1';
 			ImmChoose <= "000";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '0';
@@ -279,6 +296,7 @@ begin
 		when "00100" =>	--BEQZ
 			SignExtend <= '1';
 			Reg1Choose <= "110";
+			Reg2Choose <= '1';
 			ImmChoose <= "001";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '0';
@@ -292,6 +310,7 @@ begin
 		when "00101" =>	--BNEZ
 			SignExtend <= '1';
 			Reg1Choose <= "110";
+			Reg2Choose <= '1';
 			ImmChoose <= "001";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '0';
@@ -305,6 +324,7 @@ begin
 		when "01101" => 	--LI
 			SignExtend <= '0';
 			Reg1Choose <= "111";
+			Reg2Choose <= '1';
 			ImmChoose <= "001";
 			RegDstChoose <= "110";
 			ImmOrReg2 <= '1';
@@ -318,6 +338,7 @@ begin
 		when "10011" =>	--LW
 			SignExtend <= '1';
 			Reg1Choose <= "110";
+			Reg2Choose <= '1';
 			ImmChoose <= "010";
 			RegDstChoose <= "101";
 			ImmOrReg2 <= '1';
@@ -331,6 +352,7 @@ begin
 		when "10010" =>	--LW_SP
 			SignExtend <= '1';
 			Reg1Choose <= "000";
+			Reg2Choose <= '1';
 			ImmChoose <= "001";
 			RegDstChoose <= "110";
 			ImmOrReg2 <= '1';
@@ -345,6 +367,7 @@ begin
 			if Instruction(0)='0' then	--MFIH
 				SignExtend <= '1';
 				Reg1Choose <= "001";
+				Reg2Choose <= '1';
 				ImmChoose <= "111";
 				RegDstChoose <= "110";
 				ImmOrReg2 <= '0';
@@ -358,6 +381,7 @@ begin
 			else	--MTIH
 				SignExtend <= '1';
 				Reg1Choose <= "110";
+				Reg2Choose <= '1';
 				ImmChoose <= "111";
 				RegDstChoose <= "001";
 				ImmOrReg2 <= '0';
@@ -372,6 +396,7 @@ begin
 		when "00001" =>	--NOP
 			SignExtend <= '1';
 			Reg1Choose <= "111";
+			Reg2Choose <= '1';
 			ImmChoose <= "111";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '1';
@@ -387,6 +412,7 @@ begin
 				when "00" =>	--SLL
 					SignExtend <= '0';
 					Reg1Choose <= "101";
+					Reg2Choose <= '1';
 					ImmChoose <= "011";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '1';
@@ -400,6 +426,7 @@ begin
 				when "11" =>	--SRA
 					SignExtend <= '0';
 					Reg1Choose <= "101";
+					Reg2Choose <= '1';
 					ImmChoose <= "011";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '1';
@@ -413,6 +440,7 @@ begin
 				when "10" =>	--SRL
 					SignExtend <= '0';
 					Reg1Choose <= "101";
+					Reg2Choose <= '1';
 					ImmChoose <= "011";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '1';
@@ -428,6 +456,7 @@ begin
 		when "11011" =>	--SW
 			SignExtend <= '1';
 			Reg1Choose <= "110";
+			Reg2Choose <= '1';
 			ImmChoose <= "010";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '1';
@@ -441,6 +470,7 @@ begin
 		when "11010" =>	--SW_SP
 			SignExtend <= '1';
 			Reg1Choose <= "000";
+			Reg2Choose <= '0';
 			ImmChoose <= "001";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '1';
@@ -454,6 +484,7 @@ begin
 		when "01010" => 	--SLTI
 			SignExtend <= '1';
 			Reg1Choose <= "110";
+			Reg2Choose <= '1';
 			ImmChoose <= "001";
 			RegDstChoose <= "011";
 			ImmOrReg2 <= '1';
