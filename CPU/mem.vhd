@@ -36,13 +36,17 @@ begin
 			ram_en <= '0';
 			ram_we <= '1';
 			ram_oe <= '0';
+			wrn <= '1';
+			rdn <= '1';
 			ram_data <= "ZZZZZZZZZZZZZZZZ";
 			ram_addr <= "00" & pc;
 		elsif nclk0 = '1' then
 			ram_en <= '0';
-			instr <= ram_data;
 			ram_oe <= '1';
 			ram_we <= '1';
+			wrn <= '1';
+			rdn <= '1';
+			instr <= ram_data;
 		elsif clk_wb = '1' then
 			if addr(15 downto 0) = "1011111100000000" then
 				ram_en <= '1';
@@ -51,18 +55,22 @@ begin
 				if rw = '1' then
 					ram_data <= idata;
 					wrn <= '0';
+					rdn <= '1';
 				else
+					ram_data <= "ZZZZZZZZZZZZZZZZ";
 					rdn <= '0';
+					wrn <= '1';
 				end if;
 			elsif addr(15 downto 0) = "1011111100000001" then
 				ram_en <= '1';
 				ram_oe <= '1';
 				ram_we <= '1';
-				if rw = '0' then
-
-				end if;
+				wrn <= '1';
+				rdn <= '1';
 			else
 				ram_en <= '0';
+				wrn <= '1';
+				rdn <= '1';
 				if rw = '0' then
 					ram_we <= '1';
 					ram_oe <= '0';
@@ -75,28 +83,24 @@ begin
 				end if;
 			end if;
 		elsif nclk_wb = '1' then
+			ram_en <= '1';
+			ram_oe <= '1';
+			ram_we <= '1';
+			rdn <= '1';
+			wrn <= '1';
+				
 			if addr(15 downto 0) = "1011111100000000" then
-				ram_en <= '1';
-				ram_oe <= '1';
-				ram_we <= '1';
-				if rw = '1' then
-					wrn <= '1';
-				else
+				if rw = '0' then
 					odata <= ram_data;
 				end if;
 			elsif addr(15 downto 0) = "1011111100000001" then
-				ram_en <= '1';
-				ram_oe <= '1';
-				ram_we <= '1';
-
 				if rw = '0' then
-					odata <= "00000000000000" & data_ready & (tbre and tsre);
+					odata <= "00000000000000" & data_ready & tsre;
 				end if;
 			else
-				ram_en <= '0';
-				ram_we <= '1';
-				ram_oe <= '1';
-				odata <= ram_data;
+				if rw = '0' then
+					odata <= ram_data;
+				end if;
 			end if;
 		end if;
 	end process;
