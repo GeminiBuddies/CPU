@@ -293,6 +293,18 @@ architecture Behavioral of TopModule is
 	);
 	end component;
 	
+	component CPU_FORWARD_SRCC
+		port(
+			origin_data		: in STD_LOGIC_VECTOR(15 downto 0);
+			r_src				: in STD_LOGIC_VECTOR(3 downto 0);
+			exe_mem_data	: in STD_LOGIC_VECTOR(15 downto 0);
+			exe_mem_r_dst	: in STD_LOGIC_VECTOR(3 downto 0);
+			mem_wb_data		: in STD_LOGIC_VECTOR(15 downto 0);
+			mem_wb_r_dst	: in STD_LOGIC_VECTOR(3 downto 0);
+			result			: out STD_LOGIC_VECTOR(15 downto 0)
+		);
+	end component;
+	
 	signal m_PCKeep: STD_LOGIC;
 	signal m_PCFromMux : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_PCFromReg : STD_LOGIC_VECTOR(15 downto 0);
@@ -333,6 +345,7 @@ architecture Behavioral of TopModule is
 	signal m_MemOrAluFromController : STD_LOGIC;
 	signal m_MemOrAluFromIDEXE : STD_LOGIC;
 	signal m_MemOrAluFromEXEMEM : STD_LOGIC;
+	signal m_MemOrAluFromMEMWB : STD_LOGIC;
 	
 	signal m_Reg1IndexFromMux : STD_LOGIC_VECTOR(3 downto 0);
 	signal m_Reg1IndexFromIDEXE : STD_LOGIC_VECTOR(3 downto 0);
@@ -362,6 +375,9 @@ architecture Behavioral of TopModule is
 	signal m_IFIDKeep : STD_LOGIC;
 	signal m_IFIDFlush £º STD_LOGIC;
 	signal m_IDEXEFlush : STD_LOGIC;
+	
+	signal m_MemDataFromMem : STD_LOGIC_VECTOR(15 downto 0);
+	signal m_MemDataFromMEMWB : STD_LOGIC_VECTOR(15 downto 0);
 	
 	
 begin
@@ -452,7 +468,7 @@ begin
 	m_Reg2DataFromRegs,
 	m_WriteRegFromMEMWB,
 	m_WriteDataFromMux,
-	m_RegDstIndexFromMEMRB,
+	m_RegDstIndexFromMEMWB,
 	m_Reg1IndexFromMux,
 	m_Reg2IndexFromMux
 	);
