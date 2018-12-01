@@ -19,7 +19,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -35,7 +36,7 @@ entity RegisterGroup is
 			  Reg1Data : out  STD_LOGIC_VECTOR (15 downto 0);
            Reg2Data : out  STD_LOGIC_VECTOR (15 downto 0);
            WriteReg : in  STD_LOGIC;
-           WriteData : in  STD_LOGIC;
+           WriteData : in  STD_LOGIC_VECTOR(15 downto 0);
            DstReg : in  STD_LOGIC_VECTOR (3 downto 0);
            Reg1Index : in  STD_LOGIC_VECTOR (3 downto 0);
            Reg2Index : in  STD_LOGIC_VECTOR (3 downto 0));
@@ -43,16 +44,16 @@ end RegisterGroup;
 
 architecture Behavioral of RegisterGroup is
 type REG_GROUP is array(0 to 15) of STD_LOGIC_VECTOR(15 downto 0);
-signal reg_group:REG_GROUP;
+signal RegGroup:REG_GROUP;
 
 begin
 process(clk, WriteReg, WriteData, DstReg)
 begin
 	if WriteReg = '1' then
-		reg_group(CONV_INTEGER(DstReg)) <= WriteData;
+		RegGroup(CONV_INTEGER(DstReg)) <= WriteData;
 	elsif falling_edge(clk) then
-	   Reg1Data <= reg_group(CONV_INTEGER(Reg1Index));
-		Reg2Data <= reg_group(CONV_INTEGER(Reg2Index));
+	   Reg1Data <= RegGroup(CONV_INTEGER(Reg1Index));
+		Reg2Data <= RegGroup(CONV_INTEGER(Reg2Index));
 	end if;
 end process;
 

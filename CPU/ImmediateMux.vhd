@@ -41,7 +41,7 @@ architecture Behavioral of ImmediateMux is
 
 begin
 
-process(Instrcution, SignExtend, ImmChoose)
+process(Instruction, SignExtend, ImmChoose)
 begin
 case ImmChoose is
 	when "000" =>
