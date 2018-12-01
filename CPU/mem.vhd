@@ -22,7 +22,7 @@ entity mem is
 		odata: out std_logic_vector(15 downto 0);
 		wrn: out std_logic;
 		tbre: in std_logic;
-		tsre: in std_logic；
+		tsre: in std_logic;
 		rdn: out std_logic;
 		data_ready: in std_logic
 	);
