@@ -133,8 +133,8 @@ begin
 				end if;
 			when "1110" => --B
 				result <= "0000000000000001";
-			when others=>
-				result <= (others => '0');
+			when others=>	--JALR
+				result <= srcA + "0000000000000001";
 		end case;
 	end process;
 end Behavioral;
