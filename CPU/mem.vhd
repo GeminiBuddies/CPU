@@ -9,7 +9,7 @@ entity mem is
 		nclk0: in std_logic;
 		clk_wb: in std_logic;
 		nclk_wb: in std_logic;
-		ram_addr: out std_logic_vector(15 downto 0);
+		ram_addr: out std_logic_vector(17 downto 0);
 		ram_data: inout std_logic_vector(15 downto 0);
 		ram_en: out std_logic;
 		ram_oe: out std_logic;
@@ -31,7 +31,7 @@ begin
 		if clk0 = '1' then
 			ram_we <= '1';
 			ram_oe <= '0';
-			ram_addr <= pc;
+			ram_addr <= "00" & pc;
 		elsif nclk0 = '1' then
 			instr <= ram_data;
 			ram_oe <= '1';
@@ -39,11 +39,11 @@ begin
 			if rw = '0' then
 				ram_we <= '1';
 				ram_oe <= '0';
-				ram_addr <= addr;
+				ram_addr <= "00" & addr;
 			else
 				ram_we <= '0';
 				ram_oe <= '1';
-				ram_addr <= addr;
+				ram_addr <= "00" & addr;
 				ram_data <= idata;
 			end if;
 		elsif nclk_wb = '1' then
