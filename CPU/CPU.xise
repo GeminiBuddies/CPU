@@ -95,6 +95,10 @@
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="35"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="6"/>
     </file>
+    <file xil_pn:name="memfake.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="36"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="6"/>
+    </file>
     <file xil_pn:name="TopModule.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="196"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="20"/>
