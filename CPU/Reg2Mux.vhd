@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Reg2Mux is
     Port ( Instruction : in  STD_LOGIC_VECTOR (15 downto 0);
-           Reg2Choose : in  STD_LOGIC;
+           Reg2Choose : in  STD_LOGIC_VECTOR(1 downto 0);
            Reg2Index : out  STD_LOGIC_VECTOR (3 downto 0));
 end Reg2Mux;
 

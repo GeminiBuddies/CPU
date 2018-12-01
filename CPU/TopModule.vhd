@@ -31,7 +31,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity TopModule is
 	port(
-		clk : in STD_LOGIC
+		clk : in STD_LOGIC;
+		rst : in STD_LOGIC
 	);
 end TopModule;
 
@@ -73,7 +74,7 @@ architecture Behavioral of TopModule is
            WriteReg : out  STD_LOGIC;
 			  UsePc : out STD_LOGIC;
 			  Reg1Choose : out STD_LOGIC_VECTOR (2 downto 0);
-			  Reg2Choose : out STD_LOGIC;
+			  Reg2Choose : out STD_LOGIC_VECTOR (1 downto 0);
 			  ImmChoose : out STD_LOGIC_VECTOR (2 downto 0);
 			  RegDstChoose : out STD_LOGIC_VECTOR (2 downto 0);
 			  HazardKind : out STD_LOGIC_VECTOR(1 downto 0);
@@ -101,7 +102,7 @@ architecture Behavioral of TopModule is
 	
 	component Reg2Mux
 		Port ( Instruction : in  STD_LOGIC_VECTOR (15 downto 0);
-           Reg2Choose : in  STD_LOGIC;
+           Reg2Choose : in  STD_LOGIC_VECTOR(1 downto 0);
            Reg2Index : out  STD_LOGIC_VECTOR (3 downto 0));
 	end component;
 	
@@ -291,8 +292,218 @@ architecture Behavioral of TopModule is
 			WriteRegOut : out STD_LOGIC
 	);
 	end component;
+	
+	signal _PCKeep: STD_LOGIC;
+	signal _PCFromMux : STD_LOGIC_VECTOR(15 downto 0);
+	signal _PCFromReg : STD_LOGIC_VECTOR(15 downto 0);
+	signal _PCFromAdder : STD_LOGIC_VECTOR(15 downto 0);
+	signal _PCFromIFID : STD_LOGIC_VECTOR(15 downto 0);
+	signal _PCFromIDEXE : STD_LOGIC_VECTOR(15 downto 0);
+	signal _PCChoose: STD_LOGIC_VECTOR(1 downto 0);
+	signal _CondJumpDst : STD_LOGIC_VECTOR(15 downto 0);
+	
+	signal _InstructionFromMem : STD_LOGIC_VECTOR(15 downto 0);
+	signal _InstructionFromIFID : STD_LOGIC_VECTOR(15 downto 0);
+	
+	signal _AluOpFromController : STD_LOGIC_VECTOR(3 downto 0);
+	signal _AluOpFromIDEXE : STD_LOGIC_VECTOR(3 downto 0);
+	
+	signal _SignExtend : STD_LOGIC;
+	
+	signal _ImmOrReg2FromController : STD_LOGIC;
+	signal _ImmOrReg2FromIDEXE : STD_LOGIC;
+	signal _MemReadFromController £º STD_LOGIC;
+	signal _MemReadFromIDEXE : STD_LOGIC;
+	signal _MemReadFromEXEMEM : STD_LOGIC;
+	signal _MemWriteFromController : STD_LOGIC;
+	signal _MemWriteFromIDEXE £º STD_LOGIC;
+	signal _MemWriteFromEXEMEM : STD_LOGIC;
+	signal _WriteRegFromController : STD_LOGIC;
+	signal _WriteRegFromIDEXE : STD_LOGIC;
+	signal _WriteRegFromEXEMEM : STD_LOGIC;
+	signal _WriteRegFromMEMRB : STD_LOGIC;
+	signal _UsePCFromController : STD_LOGIC;
+	signal _UsePCFromIDEXE : STD_LOGIC;
+	signal _Reg1Choose : STD_LOGIC_VECTOR(2 downto 0);
+	signal _Reg2Choose : STD_LOGIC_VECTOR(1 downto 0);
+	signal _ImmChoose : STD_LOGIC_VECTOR(2 downto 0);
+	signal _RegDstChoose : STD_LOGIC_VECTOR(2 downto 0);
+	signal _HazardKindFromController : STD_LOGIC_VECTOR(1 downto 0);
+	signal _HazardKindFromIDEXE : STD_LOGIC_VECTOR(1 downto 0);
+	signal _MemOrAluFromController : STD_LOGIC;
+	signal _MemOrAluFromIDEXE : STD_LOGIC;
+	signal _MemOrAluFromEXEMEM : STD_LOGIC;
+	
+	signal _Reg1IndexFromMux : STD_LOGIC_VECTOR(3 downto 0);
+	signal _Reg1IndexFromIDEXE : STD_LOGIC_VECTOR(3 downto 0);
+	signal _Reg2IndexFromMux : STD_LOGIC_VECTOR(3 downto 0);
+	signal _Reg2IndexFromIDEXE : STD_LOGIC_VECTOR(3 downto 0);
+	signal _RegDstIndexFromMux : STD_LOGIC_VECTOR(3 downto 0);
+	signal _RegDstIndexFromIDEXE : STD_LOGIC_VECTOR(3 downto 0);
+	signal _RegDstIndexFromEXEMEM : STD_LOGIC_VECTOR(3 downto 0);
+	signal _RegDstIndexFromMEMWB : STD_LOGIC_VECTOR(3 downto 0);
+	signal _ImmFromMux : STD_LOGIC_VECTOR(15 downto 0);
+	signal _ImmFromIDEXE : STD_LOGIC_VECTOR(15 downto 0);
+	
+	signal _Reg1DataFromRegs : STD_LOGIC_VECTOR(15 downto 0);
+	signal _Reg1DataFromIDEXE : STD_LOGIC_VECTOR(15 downto 0);
+	signal _Reg2DataFromRegs : STD_LOGIC_VECTOR(15 downto 0);
+	signal _Reg2DataFromIDEXE : STD_LOGIC_VECTOR(15 downto 0);
+	
+	
 begin
-
+	u1 : PC
+	PORT MAP(
+	clk, 
+	_PCKeep,
+	_PCFromMux, 
+	_PCFromReg);
+	
+	
+	u2 : PCAdder
+	PORT MAP(
+	_PCFromReg,
+	_PCFromAdder);
+	
+	
+	u3 : PCMux 
+	PORT MAP(
+	_PCChoose, 
+	_PCFromAdder,
+	_Reg1DataFromIDEXE,
+	_CondJumpDst,
+	_PCFromMux);
+	
+	
+	u4 : IF_ID_PILLAR 
+	PORT MAP(
+	clk, 
+	_IFIDKeep, 
+	_IFIDFlush, 
+	_PCFromAdder, 
+	_PCFromIFID,
+	_InstructionFromIFID, 
+	_InstructionFromMem); 
+	
+	
+	u5 : Controller 
+	PORT MAP(
+	_AluOpFromController, 
+	_InstructionFromIFID, 
+	_SignExtend, 
+	_ImmOrReg2FromController, 
+	_MemReadFromController,
+	_MemWriteFromController,
+	_WriteRegFromController,
+	_UsePCFromController,
+	_Reg1Choose,
+	_Reg2Choose,
+	_ImmChoose,
+	_RegDstChoose,
+	_HazardKindFromController,
+	_MemOrAluFromController);
+	
+	u6 : Reg1Mux		--reg1mux
+	PORT MAP(
+	_Reg1Choose,
+	_InstructionFromIFID,
+	_Reg1IndexFromMux
+	);
+	
+	u7 : Reg1Mux 		--regDstMux
+	PORT MAP(
+	_RegDstChoose,
+	_InstructionFromIFID,
+	_RegDstIndexFromMux
+	);
+	
+	u8 : Reg2Mux 		
+	PORT MAP(
+	_InstructionFromIFID,
+	_Reg2Choose,
+	_Reg2IndexFromMux
+	);
+	
+	u9 : ImmediateMux
+	PORT MAP(
+	_InstructionFromIFID,
+	_SignExtend,
+	_ImmChoose,
+	_ImmFromMux
+	);
+	
+	u10 : RegiterGroup
+	PORT MAP(
+	clk,
+	_Reg1DataFromRegs,
+	_Reg2DataFromRegs,
+	_WriteRegFromMEMRB,
+	_WriteDataFromMux,
+	_RegDstFromMEMRB,
+	_Reg1IndexFromMux,
+	_Reg2IndexFromMux
+	);
+	
+	u11 : ID_EXE_PILLAR
+	PORT MAP(
+	clk,
+	_PCFromIFID,
+	_PCFromIDEXE,
+	_AluOpFromController,
+	_AluOpFromIDEXE,
+	_ImmOrReg2FromController,
+	_ImmOrReg2FromIDEXE,
+	_UsePCFromController,
+	_UsePCFromIDEXE,
+	_Reg1DataFromRegs,
+	_Reg1DataFromIDEXE,
+	_Reg2DataFromRegs,
+	_Reg2DataFromIDEXE,
+	_ImmFromMux,
+	_ImmFromIDEXE,
+	_Reg1IndexFromMux,
+	_Reg1IndexFromIDEXE,
+	_Reg2IndexFromMux,
+	_Reg2IndexFromIDEXE,
+	_RegDstIndexFromMux,
+	_RegDstIndexFromIDEXE,
+	_HazardKindFromController,
+	_HazardKindFromIDEXE,
+	_MemReadFromController,
+	_MemReadFromIDEXE,
+	_MemWriteFromController,
+	_MemWriteFromIDEXE,
+	_WriteRegFromController,
+	_WriteRegFromIDEXE,
+	_MemOrAluFromController,
+	_MemOrAluFromIDEXE,
+	_IDEXEFlush,
+	);
+	
+	u12 : HazardDetection
+	PORT MAP(
+	_RegDstIndexFromIDEXE,
+	_Reg1IndexFromMux,
+	_Reg2IndexFromMux,
+	_HazardKindFromIDEXE,
+	_AluResFromAlu,
+	_PCKeep,
+	_IFIDKeep,
+	_IFIDFlush,
+	_IDEXEFlush,
+	_PCChoose
+	);
+	
+	u13 : CPU_ADDER
+	PORT MAP(
+	_PCFromIDEXE,
+	_ImmFromIDEXE,
+	_CondJumpDst
+	);
+	
+	u14 : 
+	
+	
 
 end Behavioral;
 
