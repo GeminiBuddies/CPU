@@ -369,7 +369,8 @@ architecture Behavioral of TopModule is
 	signal m_AluSrc1 : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_AluSrc2 : STD_LOGIC_VECTOR(15 downto 0);
 	
-	signal m_WriteMemData : STD_LOGIC_VECTOR(15 downto 0);
+	signal m_WriteMemDataFromEXEMEM : STD_LOGIC_VECTOR(15 downto 0);
+	signal m_WriteMemDataFromMux : STD_LOGIC_VECTOR(15 downto 0);
 	
 	signal m_WriteDataFromMux : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_IFIDKeep : STD_LOGIC;
@@ -573,8 +574,8 @@ begin
 	m_MemWriteFromEXEMEM,
 	m_AluResFromAlu,
 	m_AluResFromEXEMEM,
-	m_Reg2DataFromIDEXE,
-	m_WriteMemData,
+	m_WriteMemDataFromMux,
+	m_WriteMemDataFromEXEMEM,
 	m_RegDstIndexFromIDEXE,
 	m_RegDstIndexFromEXEMEM,
 	m_MemOrAluFromIDEXE,
@@ -614,7 +615,7 @@ begin
 	m_RegDstIndexFromEXEMEM,
 	m_AluResFromMEMWB,
 	m_RegDstIndexFromMEMWB,
-	m_AluSrc2
+	m_WriteMemDataFromMux
 	);
 	
 
