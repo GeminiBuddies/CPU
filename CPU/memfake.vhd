@@ -83,6 +83,8 @@ begin
 					instr <= "0011010111001110";
 				when "11100" =>
 					instr <= "1110111100000011";
+				when others =>
+					instr <= "0000100000000000";
 			end case;
 		elsif clk_wb = '1' then
 		elsif nclk_wb = '1' then
