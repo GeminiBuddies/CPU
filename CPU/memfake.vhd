@@ -24,7 +24,7 @@ begin
 	begin
 		if clk0 = '1' then
 		elsif nclk0 = '1' then
-			case pc(3 downto 0) is
+			case pc(4 downto 0) is
 				when "00000" =>
 					instr <= "0100100111111111";
 				when "00001" =>
