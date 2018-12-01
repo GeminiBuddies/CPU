@@ -39,13 +39,16 @@ architecture Behavioral of Reg2Mux is
 begin
 process(Instruction, Reg2Choose)
 begin
-	If Reg2Choose = '1' then --ry
-		Reg2Index(3) <= '0';
-		Reg2Index(2 downto 0) <= Instruction(7 downto 5);
-	else 							--rx
-		Reg2Index(3) <= '0';
-		Reg2Index(2 downto 0) <= Instruction(10 downto 8);
-	end if;
+	case Reg2Choose is
+		when "00" =>	--rx
+			Reg2Index(3) <= '0';
+			Reg2Index(2 downto 0) <= Instruction(10 downto 8);
+		when "01" =>	--ry
+			Reg2Index(3) <= '0';
+			Reg2Index(2 downto 0) <= Instruction(7 downto 5);
+		when others =>
+			Reg2Index <= "1111";
+	end case;
 end process;
 end Behavioral;
 

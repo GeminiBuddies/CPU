@@ -47,7 +47,7 @@ end CPU_FORWARD_SRCA;
 
 architecture Behavioral of CPU_FORWARD_SRCA is
 begin
-	process(origin_data, r_src, exe_mem_data, exe_mem_r_dst, mem_wb_data, mem_wb_r_dst)
+	process(if_pc, pc, origin_data, r_src, exe_mem_data, exe_mem_r_dst, mem_wb_data, mem_wb_r_dst)
 	begin
 		if if_pc = '1' then
 			result <= pc;
