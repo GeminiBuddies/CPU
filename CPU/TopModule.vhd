@@ -324,11 +324,11 @@ architecture Behavioral of TopModule is
 	
 	signal m_ImmOrReg2FromController : STD_LOGIC;
 	signal m_ImmOrReg2FromIDEXE : STD_LOGIC;
-	signal m_MemReadFromController £º STD_LOGIC;
+	signal m_MemReadFromController : STD_LOGIC;
 	signal m_MemReadFromIDEXE : STD_LOGIC;
 	signal m_MemReadFromEXEMEM : STD_LOGIC;
 	signal m_MemWriteFromController : STD_LOGIC;
-	signal m_MemWriteFromIDEXE £º STD_LOGIC;
+	signal m_MemWriteFromIDEXE : STD_LOGIC;
 	signal m_MemWriteFromEXEMEM : STD_LOGIC;
 	signal m_WriteRegFromController : STD_LOGIC;
 	signal m_WriteRegFromIDEXE : STD_LOGIC;
@@ -373,7 +373,7 @@ architecture Behavioral of TopModule is
 	
 	signal m_WriteDataFromMux : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_IFIDKeep : STD_LOGIC;
-	signal m_IFIDFlush £º STD_LOGIC;
+	signal m_IFIDFlush : STD_LOGIC;
 	signal m_IDEXEFlush : STD_LOGIC;
 	
 	signal m_MemDataFromMem : STD_LOGIC_VECTOR(15 downto 0);
@@ -506,7 +506,7 @@ begin
 	m_WriteRegFromIDEXE,
 	m_MemOrAluFromController,
 	m_MemOrAluFromIDEXE,
-	m_IDEXEFlush,
+	m_IDEXEFlush
 	);
 	
 	u12 : HazardDetection
