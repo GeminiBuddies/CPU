@@ -30,7 +30,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity RegisterGroup is
-    Port ( Reg1Data : out  STD_LOGIC_VECTOR (15 downto 0);
+    Port ( 
+			  clk : in STD_LOGIC;
+			  Reg1Data : out  STD_LOGIC_VECTOR (15 downto 0);
            Reg2Data : out  STD_LOGIC_VECTOR (15 downto 0);
            WriteReg : in  STD_LOGIC;
            WriteData : in  STD_LOGIC;
