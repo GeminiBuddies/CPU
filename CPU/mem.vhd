@@ -19,7 +19,12 @@ entity mem is
 		rw: in std_logic; -- r = 0, w = 1
 		addr: in std_logic_vector(15 downto 0);
 		idata: in std_logic_vector(15 downto 0);
-		odata: out std_logic_vector(15 downto 0)
+		odata: out std_logic_vector(15 downto 0);
+		wrn: out std_logic;
+		tbre: in std_logic;
+		tsre: in std_logic；
+		rdn: out std_logic;
+		data_ready: in std_logic
 	);
 end mem;
 
@@ -27,29 +32,72 @@ architecture memX of mem is
 begin
 	process(clk0, nclk0, clk_wb, nclk_wb)
 	begin
-		ram_en <= '0';
 		if clk0 = '1' then
+			ram_en <= '0';
 			ram_we <= '1';
 			ram_oe <= '0';
+			ram_data <= "ZZZZZZZZZZZZZZZZ";
 			ram_addr <= "00" & pc;
 		elsif nclk0 = '1' then
+			ram_en <= '0';
 			instr <= ram_data;
 			ram_oe <= '1';
+			ram_we <= '1';
 		elsif clk_wb = '1' then
-			if rw = '0' then
-				ram_we <= '1';
-				ram_oe <= '0';
-				ram_addr <= "00" & addr;
-			else
-				ram_we <= '0';
+			if addr(15 downto 0) = "1011111100000000" then
+				ram_en <= '1';
 				ram_oe <= '1';
-				ram_addr <= "00" & addr;
-				ram_data <= idata;
+				ram_we <= '1';
+				if rw = '1' then
+					ram_data <= idata;
+					wrn <= '0';
+				else
+					rdn <= '0';
+				end if;
+			elsif addr(15 downto 0) = "1011111100000001" then
+				ram_en <= '1';
+				ram_oe <= '1';
+				ram_we <= '1';
+				if rw = '0' then
+
+				end if;
+			else
+				ram_en <= '0';
+				if rw = '0' then
+					ram_we <= '1';
+					ram_oe <= '0';
+					ram_addr <= "00" & addr;
+				else
+					ram_we <= '0';
+					ram_oe <= '1';
+					ram_addr <= "00" & addr;
+					ram_data <= idata;
+				end if;
 			end if;
 		elsif nclk_wb = '1' then
-			ram_we <= '1';
-			ram_oe <= '1';
-			odata <= ram_data;
+			if addr(15 downto 0) = "1011111100000000" then
+				ram_en <= '1';
+				ram_oe <= '1';
+				ram_we <= '1';
+				if rw = '1' then
+					wrn <= '1';
+				else
+					odata <= ram_data;
+				end if;
+			elsif addr(15 downto 0) = "1011111100000001" then
+				ram_en <= '1';
+				ram_oe <= '1';
+				ram_we <= '1';
+
+				if rw = '0' then
+					odata <= "00000000000000" & data_ready & (tbre and tsre);
+				end if;
+			else
+				ram_en <= '0';
+				ram_we <= '1';
+				ram_oe <= '1';
+				odata <= ram_data;
+			end if;
 		end if;
 	end process;
 end memX;
