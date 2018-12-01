@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    17:09:20 11/29/2018 
+-- Create Date:    15:00:41 12/01/2018 
 -- Design Name: 
--- Module Name:    Reg2Mux - Behavioral 
+-- Module Name:    PC - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,23 +29,29 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Reg2Mux is
-    Port ( Instruction : in  STD_LOGIC_VECTOR (15 downto 0);
-           Reg2Choose : in  STD_LOGIC;
-           Reg2Index : out  STD_LOGIC_VECTOR (3 downto 0));
-end Reg2Mux;
+entity PC is
+	port(
+		clk : in STD_LOGIC;
+		PCKeep : in STD_LOGIC;
+		PCIn : in STD_LOGIC_VECTOR(15 downto 0);
+		PCOut : out STD_LOGIC_VECTOR(15 downto 0)
+	);
+end PC;
 
-architecture Behavioral of Reg2Mux is
+architecture Behavioral of PC is
+
 begin
-process(Instruction, Reg2Choose)
+
+process(clk)
+
 begin
-	If Reg2Choose = '1' then --ry
-		Reg2Index(3) <= '0';
-		Reg2Index(2 downto 0) <= Instruction(7 downto 5);
-	else 							--rx
-		Reg2Index(3) <= '0';
-		Reg2Index(2 downto 0) <= Instruction(10 downto 8);
+	if rising_edge(clk) then
+		if PCKeep = '0' then
+			PCOut <= PCIn;
+		end if;
 	end if;
+
 end process;
+
 end Behavioral;
 

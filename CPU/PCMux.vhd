@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    17:09:20 11/29/2018 
+-- Create Date:    15:04:51 12/01/2018 
 -- Design Name: 
--- Module Name:    Reg2Mux - Behavioral 
+-- Module Name:    PCMux - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,23 +29,34 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Reg2Mux is
-    Port ( Instruction : in  STD_LOGIC_VECTOR (15 downto 0);
-           Reg2Choose : in  STD_LOGIC;
-           Reg2Index : out  STD_LOGIC_VECTOR (3 downto 0));
-end Reg2Mux;
+entity PCMux is
+	port(
+		PCChoose: in STD_LOGIC_VECTOR(1 downto 0);
+		AddedPC : in STD_LOGIC_VECTOR(15 downto 0);
+		RegJump : in STD_LOGIC_VECTOR(15 downto 0);
+		ConditionalJump : in STD_LOGIC_VECTOR(15 downto 0);
+		NextPC : out STD_LOGIC_VECTOR(15 downto 0)
+	);
+end PCMux;
 
-architecture Behavioral of Reg2Mux is
+architecture Behavioral of PCMux is
+
 begin
-process(Instruction, Reg2Choose)
+
+process(PCChoose, AddedPC, RegJump, ConditionalJump)
 begin
-	If Reg2Choose = '1' then --ry
-		Reg2Index(3) <= '0';
-		Reg2Index(2 downto 0) <= Instruction(7 downto 5);
-	else 							--rx
-		Reg2Index(3) <= '0';
-		Reg2Index(2 downto 0) <= Instruction(10 downto 8);
-	end if;
+
+case PCChoose is
+	when "00" =>
+		NextPC <= AddedPC;
+	when "01" =>
+		NextPC <= ConditionalJump;
+	when "10" =>
+		NextPC <= RegJump;
+	when others =>
+end case;
+
 end process;
+
 end Behavioral;
 
