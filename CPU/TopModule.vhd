@@ -590,6 +590,16 @@ begin
 	m_MemOrAluFromMEMWB
 	);
 	
+	u20 : CPU_FORWARD_SRCC
+	PORT MAP(
+	m_Reg2DataFromIDEXE,
+	m_Reg2IndexFromIDEXE,
+	m_AluResFromEXEMEM,
+	m_RegDstIndexFromEXEMEM,
+	m_AluResFromMEMWB,
+	m_RegDstIndexFromMEMWB,
+	m_AluSrc2
+	);
 	
 
 end Behavioral;
