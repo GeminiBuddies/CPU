@@ -30,7 +30,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Controller is
-    Port ( AluOp : out  STD_LOGIC_VECTOR (3 downto 0);
+    port ( AluOp : out  STD_LOGIC_VECTOR (3 downto 0);
            Instruction : in  STD_LOGIC_VECTOR (15 downto 0);
            SignExtend : out  STD_LOGIC;
            ImmOrReg2 : out  STD_LOGIC;
