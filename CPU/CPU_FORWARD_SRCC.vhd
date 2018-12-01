@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    15:51:43 11/25/2018 
+-- Create Date:    22:00:57 12/01/2018 
 -- Design Name: 
--- Module Name:    CPU_FORWARD_SRCA - Behavioral 
+-- Module Name:    CPU_FORWARD_SRCC - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -19,8 +19,6 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,10 +29,8 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity CPU_FORWARD_SRCA is
-	port(
-		if_pc				: in STD_LOGIC;
-		pc					: in STD_LOGIC_VECTOR(15 downto 0);
+entity CPU_FORWARD_SRCC is
+port(
 		origin_data		: in STD_LOGIC_VECTOR(15 downto 0);
 		r_src				: in STD_LOGIC_VECTOR(3 downto 0);
 		exe_mem_data	: in STD_LOGIC_VECTOR(15 downto 0);
@@ -43,24 +39,21 @@ entity CPU_FORWARD_SRCA is
 		mem_wb_r_dst	: in STD_LOGIC_VECTOR(3 downto 0);
 		result			: out STD_LOGIC_VECTOR(15 downto 0)
 	);
-end CPU_FORWARD_SRCA;
+end CPU_FORWARD_SRCC;
 
-architecture Behavioral of CPU_FORWARD_SRCA is
+architecture Behavioral of CPU_FORWARD_SRCC is
 begin
-	process(if_pc, pc, origin_data, r_src, exe_mem_data, exe_mem_r_dst, mem_wb_data, mem_wb_r_dst)
+	process(origin_data, r_src, exe_mem_data, exe_mem_r_dst, mem_wb_data, mem_wb_r_dst)
 	begin
-		if if_pc = '1' then
-			result <= pc;
+		if (exe_mem_r_dst = r_src) then
+			result <= exe_mem_data;
 		else
-			if (exe_mem_r_dst = r_src) then
-				result <= exe_mem_data;
+			if (mem_wb_r_dst = r_src) then
+				result <= mem_wb_data;
 			else
-				if (mem_wb_r_dst = r_src) then
-					result <= mem_wb_data;
-				else
-					result <= origin_data;
-				end if;
+				result <= origin_data;
 			end if;
 		end if;
 	end process;
 end Behavioral;
+

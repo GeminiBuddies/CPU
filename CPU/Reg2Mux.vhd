@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Reg2Mux is
     Port ( Instruction : in  STD_LOGIC_VECTOR (15 downto 0);
-           Reg2Choose : in  STD_LOGIC;
+           Reg2Choose : in  STD_LOGIC_VECTOR(1 downto 0);
            Reg2Index : out  STD_LOGIC_VECTOR (3 downto 0));
 end Reg2Mux;
 
@@ -39,13 +39,16 @@ architecture Behavioral of Reg2Mux is
 begin
 process(Instruction, Reg2Choose)
 begin
-	If Reg2Choose = '1' then --ry
-		Reg2Index(3) <= '0';
-		Reg2Index(2 downto 0) <= Instruction(7 downto 5);
-	else 							--rx
-		Reg2Index(3) <= '0';
-		Reg2Index(2 downto 0) <= Instruction(10 downto 8);
-	end if;
+	case Reg2Choose is
+		when "00" =>	--rx
+			Reg2Index(3) <= '0';
+			Reg2Index(2 downto 0) <= Instruction(10 downto 8);
+		when "01" =>	--ry
+			Reg2Index(3) <= '0';
+			Reg2Index(2 downto 0) <= Instruction(7 downto 5);
+		when others =>
+			Reg2Index <= "1111";
+	end case;
 end process;
 end Behavioral;
 
