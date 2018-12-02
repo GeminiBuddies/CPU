@@ -78,13 +78,18 @@ SP <= RegGroup(8);
 T <= RegGroup(11);
 RA <= RegGroup(10);
 
-process(clk, WriteReg, WriteData, DstReg)
+process(WriteReg, WriteData, DstReg)
+begin
+	if WriteReg = '1' then
+		RegGroup(CONV_INTEGER(DstReg)) <= WriteData;
+	end if;
+end process;
+
+process(clk)
 begin
 	if falling_edge(clk) then
-	   Reg1Data <= RegGroup(CONV_INTEGER(Reg1Index));
+		Reg1Data <= RegGroup(CONV_INTEGER(Reg1Index));
 		Reg2Data <= RegGroup(CONV_INTEGER(Reg2Index));
-	elsif WriteReg = '1' then
-		RegGroup(CONV_INTEGER(DstReg)) <= WriteData;
 	end if;
 end process;
 

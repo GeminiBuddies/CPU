@@ -148,7 +148,7 @@ begin
 					Reg1Choose <= "110";
 					Reg2Choose <= "01";
 					ImmChoose <= "111";
-					RegDstChoose <= "000";
+					RegDstChoose <= "100";
 					ImmOrReg2 <= '0';
 					AluOp <= "0001";
 					MemRead <= '0';
@@ -221,7 +221,7 @@ begin
 							UsePc <= '1';
 						when "110" =>	--JALR
 							SignExtend <= '1';
-							Reg1Choose <= "111";
+							Reg1Choose <= "110";
 							Reg2Choose <= "11";
 							ImmChoose <= "111";
 							RegDstChoose <= "010";
@@ -229,7 +229,7 @@ begin
 							AluOp <= "1111";
 							MemRead <= '0';
 							MemWrite <= '0';
-							WriteReg <= '0';
+							WriteReg <= '1';
 							MemOrAlu <= '0';
 							HazardKind <= "10";
 							UsePc <= '1';
