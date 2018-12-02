@@ -34,7 +34,7 @@ entity PC is
 		clk : in STD_LOGIC;
 		PCKeep : in STD_LOGIC;
 		PCIn : in STD_LOGIC_VECTOR(15 downto 0);
-		PCOut : out STD_LOGIC_VECTOR(15 downto 0)
+		PCOut : out STD_LOGIC_VECTOR(15 downto 0) :=x"0000"
 	);
 end PC;
 
@@ -43,9 +43,8 @@ architecture Behavioral of PC is
 begin
 
 process(clk)
-
 begin
-	if rising_edge(clk) then
+	if falling_edge(clk) then
 		if PCKeep = '0' then
 			PCOut <= PCIn;
 		end if;

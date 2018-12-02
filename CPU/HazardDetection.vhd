@@ -35,11 +35,11 @@ entity HazardDetection is
 			  RegSrc2 : in STD_LOGIC_VECTOR(3 downto 0);
 			  HazardKind : in STD_LOGIC_VECTOR(1 downto 0);
 			  AluRes : in STD_LOGIC_VECTOR(15 downto 0);
-			  PCKeep : out  STD_LOGIC;
-			  IFIDKeep : out STD_LOGIC;
-			  IFIDFlush : out STD_LOGIC;
-			  IDEXEFlush : out STD_LOGIC;
-           PCChoose : out STD_LOGIC_VECTOR(1 downto 0));
+			  PCKeep : out  STD_LOGIC := '0';
+			  IFIDKeep : out STD_LOGIC := '0';
+			  IFIDFlush : out STD_LOGIC := '0';
+			  IDEXEFlush : out STD_LOGIC :='0';
+           PCChoose : out STD_LOGIC_VECTOR(1 downto 0):= "00");
 end HazardDetection;
 
 architecture Behavioral of HazardDetection is

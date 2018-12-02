@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-entity mem is
+entity memf is
 	port(
 		clk0: in std_logic;
 		nclk0: in std_logic;
@@ -11,14 +11,15 @@ entity mem is
 		nclk_wb: in std_logic;
 		pc: in std_logic_vector(15 downto 0);
 		instr: out std_logic_vector(15 downto 0);
-		rw: in std_logic; -- r = 0, w = 1
+		r: in std_logic;
+		w: in std_logic;
 		addr: in std_logic_vector(15 downto 0);
 		idata: in std_logic_vector(15 downto 0);
 		odata: out std_logic_vector(15 downto 0)
 	);
-end mem;
+end memf;
 
-architecture memX of mem is
+architecture memX of memf is
 begin
 	process(clk0, nclk0, clk_wb, nclk_wb)
 	begin

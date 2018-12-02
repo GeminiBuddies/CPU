@@ -16,7 +16,8 @@ entity mem is
 		ram_we: out std_logic;
 		pc: in std_logic_vector(15 downto 0);
 		instr: out std_logic_vector(15 downto 0);
-		rw: in std_logic; -- r = 0, w = 1
+		r: in std_logic;
+		w: in std_logic;
 		addr: in std_logic_vector(15 downto 0);
 		idata: in std_logic_vector(15 downto 0);
 		odata: out std_logic_vector(15 downto 0);
@@ -52,11 +53,11 @@ begin
 				ram_en <= '1';
 				ram_oe <= '1';
 				ram_we <= '1';
-				if rw = '1' then
+				if w = '1' then
 					ram_data <= idata;
 					wrn <= '0';
 					rdn <= '1';
-				else
+				elsif r = '1' then
 					ram_data <= "ZZZZZZZZZZZZZZZZ";
 					rdn <= '0';
 					wrn <= '1';
@@ -71,11 +72,11 @@ begin
 				ram_en <= '0';
 				wrn <= '1';
 				rdn <= '1';
-				if rw = '0' then
+				if r = '1' then
 					ram_we <= '1';
 					ram_oe <= '0';
 					ram_addr <= "00" & addr;
-				else
+				elsif w = '1' then
 					ram_we <= '0';
 					ram_oe <= '1';
 					ram_addr <= "00" & addr;
@@ -90,15 +91,15 @@ begin
 			wrn <= '1';
 				
 			if addr(15 downto 0) = "1011111100000000" then
-				if rw = '0' then
+				if r = '1' then
 					odata <= ram_data;
 				end if;
 			elsif addr(15 downto 0) = "1011111100000001" then
-				if rw = '0' then
+				if r = '1' then
 					odata <= "00000000000000" & data_ready & tsre;
 				end if;
 			else
-				if rw = '0' then
+				if r = '1' then
 					odata <= ram_data;
 				end if;
 			end if;

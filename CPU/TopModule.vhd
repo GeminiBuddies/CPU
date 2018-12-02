@@ -31,6 +31,25 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity TopModule is
 	port(
+		--Debug		
+				Reg00 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg01 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg02 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg03 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg04 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg05 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg06 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg07 : out STD_LOGIC_VECTOR(15 downto 0);
+				IH : out STD_LOGIC_VECTOR(15 downto 0);
+				SP : out STD_LOGIC_VECTOR(15 downto 0);
+				RA : out STD_LOGIC_VECTOR(15 downto 0);
+				T : out STD_LOGIC_VECTOR(15 downto 0);
+				RegPC : out STD_LOGIC_VECTOR(15 downto 0);
+				
+				clk0 : out STD_LOGIC;
+		--Debug
+	
+	
 		clk : in STD_LOGIC;
 		rst : in STD_LOGIC
 	);
@@ -115,6 +134,21 @@ architecture Behavioral of TopModule is
 	
 	component RegisterGroup
 		Port ( 
+			  --Debug		
+				Reg00 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg01 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg02 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg03 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg04 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg05 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg06 : out STD_LOGIC_VECTOR(15 downto 0);
+				Reg07 : out STD_LOGIC_VECTOR(15 downto 0);
+				IH : out STD_LOGIC_VECTOR(15 downto 0);
+				SP : out STD_LOGIC_VECTOR(15 downto 0);
+				RA : out STD_LOGIC_VECTOR(15 downto 0);
+				T : out STD_LOGIC_VECTOR(15 downto 0);
+		--Debug
+				
 			  clk : in STD_LOGIC;
 			  Reg1Data : out  STD_LOGIC_VECTOR (15 downto 0);
            Reg2Data : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -183,10 +217,16 @@ architecture Behavioral of TopModule is
 			ram_we: out std_logic;
 			pc: in std_logic_vector(15 downto 0);
 			instr: out std_logic_vector(15 downto 0);
-			rw: in std_logic; -- r = 0, w = 1
+			r: in std_logic;
+			w: in std_logic;
 			addr: in std_logic_vector(15 downto 0);
 			idata: in std_logic_vector(15 downto 0);
-			odata: out std_logic_vector(15 downto 0)
+			odata: out std_logic_vector(15 downto 0);
+			wrn: out std_logic;
+			tbre: in std_logic;
+			tsre: in std_logic;
+			rdn: out std_logic;
+			data_ready: in std_logic
 		);
 	end component;
 	
@@ -305,13 +345,31 @@ architecture Behavioral of TopModule is
 		);
 	end component;
 	
+	
+	
+	component memf
+		port(
+		clk0: in std_logic;
+		nclk0: in std_logic;
+		clk_wb: in std_logic;
+		nclk_wb: in std_logic;
+		pc: in std_logic_vector(15 downto 0);
+		instr: out std_logic_vector(15 downto 0);
+		r: in std_logic;
+		w: in std_logic;
+		addr: in std_logic_vector(15 downto 0);
+		idata: in std_logic_vector(15 downto 0);
+		odata: out std_logic_vector(15 downto 0)
+		);
+	end component;
+	
 	signal m_PCKeep: STD_LOGIC;
 	signal m_PCFromMux : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_PCFromReg : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_PCFromAdder : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_PCFromIFID : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_PCFromIDEXE : STD_LOGIC_VECTOR(15 downto 0);
-	signal m_PCChoose: STD_LOGIC_VECTOR(1 downto 0);
+	signal m_PCChoose: STD_LOGIC_VECTOR(1 downto 0):= "00";
 	signal m_CondJumpDst : STD_LOGIC_VECTOR(15 downto 0);
 	
 	signal m_InstructionFromMem : STD_LOGIC_VECTOR(15 downto 0);
@@ -380,23 +438,34 @@ architecture Behavioral of TopModule is
 	signal m_MemDataFromMem : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_MemDataFromMEMWB : STD_LOGIC_VECTOR(15 downto 0);
 	
+	signal m_clk0 : STD_LOGIC;
+	signal m_clk1 : STD_LOGIC;
+	signal m_clk2 : STD_LOGIC;
+	signal m_clk3 : STD_LOGIC;
+	signal m_nclk0 : STD_LOGIC;
+	signal m_nclk1 : STD_LOGIC;
+	signal m_nclk2 : STD_LOGIC;
+	signal m_nclk3 : STD_LOGIC;
+	
+	
+	
 	
 begin
-	u1 : PC
+	u1_PC : PC
 	PORT MAP(
-	clk, 
+	m_clk1, 
 	m_PCKeep,
 	m_PCFromMux, 
 	m_PCFromReg);
 	
 	
-	u2 : PCAdder
+	u2_PCAdder : PCAdder
 	PORT MAP(
 	m_PCFromReg,
 	m_PCFromAdder);
 	
 	
-	u3 : PCMux 
+	u3_PCMux : PCMux 
 	PORT MAP(
 	m_PCChoose, 
 	m_PCFromAdder,
@@ -405,9 +474,9 @@ begin
 	m_PCFromMux);
 	
 	
-	u4 : IF_ID_PILLAR 
+	u4_IF_ID_PILLAR : IF_ID_PILLAR 
 	PORT MAP(
-	clk, 
+	m_clk0, 
 	m_IFIDKeep, 
 	m_IFIDFlush, 
 	m_PCFromAdder, 
@@ -416,7 +485,7 @@ begin
 	m_InstructionFromMem); 
 	
 	
-	u5 : Controller 
+	u5_Controller : Controller 
 	PORT MAP(
 	m_AluOpFromController, 
 	m_InstructionFromIFID, 
@@ -433,28 +502,28 @@ begin
 	m_HazardKindFromController,
 	m_MemOrAluFromController);
 	
-	u6 : Reg1Mux		--reg1mux
+	u6_Reg1Mux : Reg1Mux		--reg1mux
 	PORT MAP(
 	m_Reg1Choose,
 	m_InstructionFromIFID,
 	m_Reg1IndexFromMux
 	);
 	
-	u7 : Reg1Mux 		--regDstMux
+	u7_RegDstMux : Reg1Mux 		--regDstMux
 	PORT MAP(
 	m_RegDstChoose,
 	m_InstructionFromIFID,
 	m_RegDstIndexFromMux
 	);
 	
-	u8 : Reg2Mux 		
+	u8_Reg2Mux : Reg2Mux 		
 	PORT MAP(
 	m_InstructionFromIFID,
 	m_Reg2Choose,
 	m_Reg2IndexFromMux
 	);
 	
-	u9 : ImmediateMux
+	u9_ImmediateMux : ImmediateMux
 	PORT MAP(
 	m_InstructionFromIFID,
 	m_SignExtend,
@@ -462,9 +531,23 @@ begin
 	m_ImmFromMux
 	);
 	
-	u10 : RegisterGroup
+	u10_RegisterGroup : RegisterGroup
 	PORT MAP(
-	clk,
+	Reg00,
+	Reg01,
+	Reg02,
+	Reg03,
+	Reg04,
+	Reg05,
+	Reg06,
+	Reg07,
+	IH,
+	SP,
+	RA,
+	T,
+	
+	
+	m_clk0,
 	m_Reg1DataFromRegs,
 	m_Reg2DataFromRegs,
 	m_WriteRegFromMEMWB,
@@ -474,9 +557,9 @@ begin
 	m_Reg2IndexFromMux
 	);
 	
-	u11 : ID_EXE_PILLAR
+	u11_ID_EXE_PILLAR : ID_EXE_PILLAR
 	PORT MAP(
-	clk,
+	m_clk0,
 	m_PCFromIFID,
 	m_PCFromIDEXE,
 	m_AluOpFromController,
@@ -510,7 +593,7 @@ begin
 	m_IDEXEFlush
 	);
 	
-	u12 : HazardDetection
+	u12_HazardDetection : HazardDetection
 	PORT MAP(
 	m_RegDstIndexFromIDEXE,
 	m_Reg1IndexFromMux,
@@ -524,14 +607,14 @@ begin
 	m_PCChoose
 	);
 	
-	u13 : CPU_ADDER
+	u13_CPU_ADDER : CPU_ADDER
 	PORT MAP(
 	m_PCFromIDEXE,
 	m_ImmFromIDEXE,
 	m_CondJumpDst
 	);
 	
-	u14 : CPU_FORWARD_SRCA
+	u14_CPU_FORWARD_SRCA : CPU_FORWARD_SRCA
 	PORT MAP(
 	m_UsePCFromIDEXE,
 	m_PCFromIDEXE,
@@ -544,7 +627,7 @@ begin
 	m_AluSrc1
 	);
 	
-	u15 : CPU_FORWARD_SRCB
+	u15_CPU_FORWARD_SRCB : CPU_FORWARD_SRCB
 	PORT MAP(
 	m_ImmFromIDEXE,
 	m_Reg2DataFromIDEXE,
@@ -557,7 +640,7 @@ begin
 	m_AluSrc2
 	);
 	
-	u16 : CPU_ALU
+	u16_CPU_ALU : CPU_ALU
 	PORT MAP(
 	m_AluSrc1,
 	m_AluSrc2,
@@ -565,9 +648,9 @@ begin
 	m_AluResFromAlu
 	);
 	
-	u17 : EXE_MEM_PILLAR
+	u17_EXE_MEM_PILLAR : EXE_MEM_PILLAR
 	PORT MAP(
-	clk,
+	m_clk0,
 	m_MemReadFromIDEXE,
 	m_MemReadFromEXEMEM,
 	m_MemWriteFromIDEXE,
@@ -584,7 +667,7 @@ begin
 	m_WriteRegFromEXEMEM
 	);
 	
-	u18 : MEM_WB_PILLAR
+	u18_MEM_WB_PILLAR : MEM_WB_PILLAR
 	PORT MAP(
 	m_MemOrAluFromEXEMEM,
 	m_WriteRegFromEXEMEM,
@@ -596,10 +679,10 @@ begin
 	m_RegDstIndexFromMEMWB,
 	m_MemDataFromMEMWB,
 	m_AluResFromMEMWB,
-	clk
+	m_clk0
 	);
 	
-	u19 : WBMux
+	u19_WBMux : WBMux
 	PORT MAP(
 	m_WriteDataFromMux,
 	m_MemDataFromMEMWB,
@@ -607,7 +690,7 @@ begin
 	m_MemOrAluFromMEMWB
 	);
 	
-	u20 : CPU_FORWARD_SRCC
+	u20_CPU_FORWARD_SRCC : CPU_FORWARD_SRCC
 	PORT MAP(
 	m_Reg2DataFromIDEXE,
 	m_Reg2IndexFromIDEXE,
@@ -618,6 +701,37 @@ begin
 	m_WriteMemDataFromMux
 	);
 	
+	u21_splitter : splitter
+	PORT MAP(
+	clk,
+	rst,
+	m_clk0,
+	m_clk1,
+	m_clk2,
+	m_clk3,
+	m_nclk0,
+	m_nclk1,
+	m_nclk2,
+	m_nclk3
+	);
+	
+	u22_memf : memf
+	PORT MAP(
+	m_clk0,
+	m_nclk0,
+	m_clk1,
+	m_nclk1,
+	m_PCFromReg,
+	m_InstructionFromMem,
+	m_MemReadFromEXEMEM,
+	m_MemWriteFromEXEMEM,
+	m_AluResFromEXEMEM,
+	m_WriteMemDataFromEXEMEM,
+	m_MemDataFromMem
+	);
+	
+	RegPC <= m_PCFromReg;
+	clk0 <= m_clk0;
 
 end Behavioral;
 
