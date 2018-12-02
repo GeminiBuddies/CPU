@@ -44,7 +44,7 @@ begin
 
 process(clk)
 begin
-	if falling_edge(clk) then
+	if rising_edge(clk) then
 		if PCKeep = '0' then
 			PCOut <= PCIn;
 		end if;

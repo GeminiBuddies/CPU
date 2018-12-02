@@ -64,7 +64,7 @@ ARCHITECTURE behavior OF TMTest IS
 
    --Inputs
    signal clk : std_logic := '0';
-   signal rst : std_logic := '0';
+   signal rst : std_logic := '1';
 
  	--Outputs
    signal Reg00 : std_logic_vector(15 downto 0);

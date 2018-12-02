@@ -24,7 +24,7 @@
 static const char *ng0 = "E:/2018Fall/Computer Organization/CPU/CPU/PC.vhd";
 extern char *IEEE_P_2592010699;
 
-unsigned char ieee_p_2592010699_sub_1258338084_503743352(char *, char *, unsigned int , unsigned int );
+unsigned char ieee_p_2592010699_sub_1744673427_503743352(char *, char *, unsigned int , unsigned int );
 
 
 static void work_a_1991350011_3212880686_p_0(char *t0)
@@ -43,7 +43,7 @@ static void work_a_1991350011_3212880686_p_0(char *t0)
 
 LAB0:    xsi_set_current_line(47, ng0);
     t1 = (t0 + 992U);
-    t2 = ieee_p_2592010699_sub_1258338084_503743352(IEEE_P_2592010699, t1, 0U, 0U);
+    t2 = ieee_p_2592010699_sub_1744673427_503743352(IEEE_P_2592010699, t1, 0U, 0U);
     if (t2 != 0)
         goto LAB2;
 

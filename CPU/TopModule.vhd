@@ -453,7 +453,7 @@ architecture Behavioral of TopModule is
 begin
 	u1_PC : PC
 	PORT MAP(
-	m_clk1, 
+	m_clk0, 
 	m_PCKeep,
 	m_PCFromMux, 
 	m_PCFromReg);

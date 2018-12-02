@@ -104,7 +104,7 @@ begin
 					ImmChoose <= "001";
 					RegDstChoose <= "111";
 					ImmOrReg2 <= '1';
-					AluOp <= "0000";
+					AluOp <= "1100";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '0';
@@ -118,7 +118,7 @@ begin
 					ImmChoose <= "111";
 					RegDstChoose <= "000";
 					ImmOrReg2 <= '1';
-					AluOp <= "0000";
+					AluOp <= "1000";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -150,7 +150,7 @@ begin
 					ImmChoose <= "111";
 					RegDstChoose <= "000";
 					ImmOrReg2 <= '0';
-					AluOp <= "0000";
+					AluOp <= "0001";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -168,7 +168,7 @@ begin
 					ImmChoose <= "111";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '0';
-					AluOp <= "0000";
+					AluOp <= "0011";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -182,7 +182,7 @@ begin
 					ImmChoose <= "111";
 					RegDstChoose <= "011";
 					ImmOrReg2 <= '0';
-					AluOp <= "0000";
+					AluOp <= "0010";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -198,7 +198,7 @@ begin
 							ImmChoose <= "111";
 							RegDstChoose <= "111";
 							ImmOrReg2 <= '1';
-							AluOp <= "0000";
+							AluOp <= "1000";
 							MemRead <= '0';
 							MemWrite <= '0';
 							WriteReg <= '0';
@@ -212,7 +212,7 @@ begin
 							ImmChoose <= "111";
 							RegDstChoose <= "110";
 							ImmOrReg2 <= '1';
-							AluOp <= "0000";
+							AluOp <= "1000";
 							MemRead <= '0';
 							MemWrite <= '0';
 							WriteReg <= '1';
@@ -226,7 +226,7 @@ begin
 							ImmChoose <= "111";
 							RegDstChoose <= "010";
 							ImmOrReg2 <= '1';
-							AluOp <= "0000";
+							AluOp <= "1111";
 							MemRead <= '0';
 							MemWrite <= '0';
 							WriteReg <= '0';
@@ -240,7 +240,7 @@ begin
 							ImmChoose <= "111";
 							RegDstChoose <= "111";
 							ImmOrReg2 <= '1';
-							AluOp <= "0000";
+							AluOp <= "1000";
 							MemRead <= '0';
 							MemWrite <= '0';
 							WriteReg <= '0';
@@ -256,7 +256,7 @@ begin
 					ImmChoose <= "111";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '0';
-					AluOp <= "0000";
+					AluOp <= "0100";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -270,7 +270,7 @@ begin
 					ImmChoose <= "111";
 					RegDstChoose <= "011";
 					ImmOrReg2 <= '0';
-					AluOp <= "0000";
+					AluOp <= "1010";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -286,7 +286,7 @@ begin
 			ImmChoose <= "000";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '0';
-			AluOp <= "0000";
+			AluOp <= "1110";
 			MemRead <= '0';
 			MemWrite <= '0';
 			WriteReg <= '0';
@@ -300,7 +300,7 @@ begin
 			ImmChoose <= "001";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '0';
-			AluOp <= "0000";
+			AluOp <= "1100";
 			MemRead <= '0';
 			MemWrite <= '0';
 			WriteReg <= '0';
@@ -314,7 +314,7 @@ begin
 			ImmChoose <= "001";
 			RegDstChoose <= "111";
 			ImmOrReg2 <= '0';
-			AluOp <= "0000";
+			AluOp <= "1101";
 			MemRead <= '0';
 			MemWrite <= '0';
 			WriteReg <= '0';
@@ -328,7 +328,7 @@ begin
 			ImmChoose <= "001";
 			RegDstChoose <= "110";
 			ImmOrReg2 <= '1';
-			AluOp <= "0000";
+			AluOp <= "1001";
 			MemRead <= '0';
 			MemWrite <= '0';
 			WriteReg <= '1';
@@ -371,7 +371,7 @@ begin
 				ImmChoose <= "111";
 				RegDstChoose <= "110";
 				ImmOrReg2 <= '0';
-				AluOp <= "0000";
+				AluOp <= "1000";
 				MemRead <= '0';
 				MemWrite <= '0';
 				WriteReg <= '1';
@@ -385,7 +385,7 @@ begin
 				ImmChoose <= "111";
 				RegDstChoose <= "001";
 				ImmOrReg2 <= '0';
-				AluOp <= "0000";
+				AluOp <= "1000";
 				MemRead <= '0';
 				MemWrite <= '0';
 				WriteReg <= '1';
@@ -416,7 +416,7 @@ begin
 					ImmChoose <= "011";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '1';
-					AluOp <= "0000";
+					AluOp <= "0101";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -430,7 +430,7 @@ begin
 					ImmChoose <= "011";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '1';
-					AluOp <= "0000";
+					AluOp <= "0110";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -444,7 +444,7 @@ begin
 					ImmChoose <= "011";
 					RegDstChoose <= "110";
 					ImmOrReg2 <= '1';
-					AluOp <= "0000";
+					AluOp <= "0111";
 					MemRead <= '0';
 					MemWrite <= '0';
 					WriteReg <= '1';
@@ -488,7 +488,7 @@ begin
 			ImmChoose <= "001";
 			RegDstChoose <= "011";
 			ImmOrReg2 <= '1';
-			AluOp <= "0000";
+			AluOp <= "1011";
 			MemRead <= '0';
 			MemWrite <= '0';
 			WriteReg <= '1';

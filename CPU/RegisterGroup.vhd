@@ -60,8 +60,8 @@ end RegisterGroup;
 
 architecture Behavioral of RegisterGroup is
 type REG_GROUP is array(0 to 15) of STD_LOGIC_VECTOR(15 downto 0);
-signal RegGroup:REG_GROUP:=(x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",
-x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000",x"0000");
+signal RegGroup:REG_GROUP:=(x"0000",x"0001",x"0002",x"0003",x"0004",x"0005",x"0006",x"0007",
+x"0008",x"0009",x"000A",x"000B",x"000C",x"000D",x"000E",x"000F");
 
 begin
 
@@ -80,11 +80,11 @@ RA <= RegGroup(10);
 
 process(clk, WriteReg, WriteData, DstReg)
 begin
-	if WriteReg = '1' then
-		RegGroup(CONV_INTEGER(DstReg)) <= WriteData;
-	elsif falling_edge(clk) then
+	if falling_edge(clk) then
 	   Reg1Data <= RegGroup(CONV_INTEGER(Reg1Index));
 		Reg2Data <= RegGroup(CONV_INTEGER(Reg2Index));
+	elsif WriteReg = '1' then
+		RegGroup(CONV_INTEGER(DstReg)) <= WriteData;
 	end if;
 end process;
 

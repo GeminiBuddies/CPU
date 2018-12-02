@@ -41,8 +41,8 @@ entity CPU_ALU is
 end CPU_ALU;
 
 architecture Behavioral of CPU_ALU is
-	shared variable tmp : std_logic_vector(15 downto 0);
-	shared variable flag : std_logic;
+	shared variable tmp : std_logic_vector(15 downto 0):=x"0000";
+	shared variable flag : std_logic:='0';
 begin
 	process(srcA, srcB, op)
 	begin
