@@ -33,8 +33,6 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity CPU_FORWARD_SRCA is
 	port(
-		if_pc				: in STD_LOGIC;
-		pc					: in STD_LOGIC_VECTOR(15 downto 0);
 		origin_data		: in STD_LOGIC_VECTOR(15 downto 0);
 		r_src				: in STD_LOGIC_VECTOR(3 downto 0);
 		exe_mem_data	: in STD_LOGIC_VECTOR(15 downto 0);
@@ -47,19 +45,15 @@ end CPU_FORWARD_SRCA;
 
 architecture Behavioral of CPU_FORWARD_SRCA is
 begin
-	process(if_pc, pc, origin_data, r_src, exe_mem_data, exe_mem_r_dst, mem_wb_data, mem_wb_r_dst)
+	process(origin_data, r_src, exe_mem_data, exe_mem_r_dst, mem_wb_data, mem_wb_r_dst)
 	begin
-		if if_pc = '1' then
-			result <= pc;
+		if (exe_mem_r_dst = r_src) then
+			result <= exe_mem_data;
 		else
-			if (exe_mem_r_dst = r_src) then
-				result <= exe_mem_data;
+			if (mem_wb_r_dst = r_src) then
+				result <= mem_wb_data;
 			else
-				if (mem_wb_r_dst = r_src) then
-					result <= mem_wb_data;
-				else
-					result <= origin_data;
-				end if;
+				result <= origin_data;
 			end if;
 		end if;
 	end process;

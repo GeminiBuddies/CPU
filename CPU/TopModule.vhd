@@ -178,8 +178,6 @@ architecture Behavioral of TopModule is
 	
 	component CPU_FORWARD_SRCA
 		port(
-			if_pc				: in STD_LOGIC;
-			pc					: in STD_LOGIC_VECTOR(15 downto 0);
 			origin_data		: in STD_LOGIC_VECTOR(15 downto 0);
 			r_src				: in STD_LOGIC_VECTOR(3 downto 0);
 			exe_mem_data	: in STD_LOGIC_VECTOR(15 downto 0);
@@ -189,6 +187,16 @@ architecture Behavioral of TopModule is
 			result			: out STD_LOGIC_VECTOR(15 downto 0)
 		);
 	end component;
+	
+	component AluPCMux
+		port(
+			UsePC : in STD_LOGIC;
+			PC : in STD_LOGIC_VECTOR(15 downto 0);
+			ForwardAData : in STD_LOGIC_VECTOR(15 downto 0);
+			AluSrc1 : out STD_LOGIC_VECTOR(15 downto 0)
+		);
+	end component;
+	
 	
 	component CPU_FORWARD_SRCB
 		port(
@@ -421,6 +429,8 @@ architecture Behavioral of TopModule is
 	signal m_Reg2DataFromRegs : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_Reg2DataFromIDEXE : STD_LOGIC_VECTOR(15 downto 0);
 	
+	
+	signal m_ForwardA : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_AluResFromAlu : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_AluResFromEXEMEM : STD_LOGIC_VECTOR(15 downto 0);
 	signal m_AluResFromMEMWB : STD_LOGIC_VECTOR(15 downto 0);
@@ -469,7 +479,7 @@ begin
 	PORT MAP(
 	m_PCChoose, 
 	m_PCFromAdder,
-	m_Reg1DataFromIDEXE,
+	m_ForwardA,
 	m_CondJumpDst,
 	m_PCFromMux);
 	
@@ -616,15 +626,13 @@ begin
 	
 	u14_CPU_FORWARD_SRCA : CPU_FORWARD_SRCA
 	PORT MAP(
-	m_UsePCFromIDEXE,
-	m_PCFromIDEXE,
 	m_Reg1DataFromIDEXE,
 	m_Reg1IndexFromIDEXE,
 	m_AluResFromEXEMEM,
 	m_RegDstIndexFromEXEMEM,
 	m_AluResFromMEMWB,
 	m_RegDstIndexFromMEMWB,
-	m_AluSrc1
+	m_ForwardA
 	);
 	
 	u15_CPU_FORWARD_SRCB : CPU_FORWARD_SRCB
@@ -728,6 +736,14 @@ begin
 	m_AluResFromEXEMEM,
 	m_WriteMemDataFromEXEMEM,
 	m_MemDataFromMem
+	);
+	
+	u23_AluPCMux : AluPCMux
+	PORT MAP(
+	m_UsePCFromIDEXE,
+	m_PCFromIDEXE,
+	m_ForwardA,
+	m_AluSrc1
 	);
 	
 	RegPC <= m_PCFromReg;
