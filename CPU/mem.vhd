@@ -51,7 +51,7 @@ end mem;
 architecture memX of mem is
 	type STATUS_T is ( S_START, S_FLASH, S_FLASH_NOP0, S_FLASH_NOP1, S_IF_B, S_IF_E, S_MEM_B, S_MEM_E );
 
-	signal status: STATUS_T := S_START;
+	signal status: STATUS_T := S_IF_B;
 
 	component FLASH
 		port(

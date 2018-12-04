@@ -1,5 +1,4 @@
 
-# PlanAhead Generated physical constraints 
 
 NET "flash_addr[22]" LOC = K4;
 NET "flash_addr[21]" LOC = K5;
@@ -73,7 +72,7 @@ NET "ram_data[3]" LOC = J15;
 NET "ram_data[2]" LOC = J14;
 NET "ram_data[1]" LOC = J13;
 NET "ram_data[0]" LOC = J12;
-NET "clk" LOC = B8;
+NET "clk" LOC = U9;
 NET "data_ready" LOC = A16;
 NET "flash_byte" LOC = C1;
 NET "flash_ce" LOC = E4;
@@ -89,3 +88,21 @@ NET "rst" LOC = U10;
 NET "tbre" LOC = D14;
 NET "tsre" LOC = N9;
 NET "wrn" LOC = U5;
+
+
+NET "RegPC[15]" LOC = A14;
+NET "RegPC[14]" LOC = E13;
+NET "RegPC[13]" LOC = D13;
+NET "RegPC[12]" LOC = B13;
+NET "RegPC[11]" LOC = A13;
+NET "RegPC[10]" LOC = F12;
+NET "RegPC[9]" LOC = E12;
+NET "RegPC[8]" LOC = A12;
+NET "RegPC[7]" LOC = F11;
+NET "RegPC[6]" LOC = E11;
+NET "RegPC[5]" LOC = D11;
+NET "RegPC[4]" LOC = C11;
+NET "RegPC[3]" LOC = B11;
+NET "RegPC[2]" LOC = A11;
+NET "RegPC[1]" LOC = E10;
+NET "RegPC[0]" LOC = D10;

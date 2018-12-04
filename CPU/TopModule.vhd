@@ -44,7 +44,7 @@ entity TopModule is
 --				SP : out STD_LOGIC_VECTOR(15 downto 0);
 --				RA : out STD_LOGIC_VECTOR(15 downto 0);
 --				T : out STD_LOGIC_VECTOR(15 downto 0);
---				RegPC : out STD_LOGIC_VECTOR(15 downto 0);
+			RegPC : out STD_LOGIC_VECTOR(15 downto 0);
 --				
 --				clk0 : out STD_LOGIC;
 		--Debug
@@ -844,7 +844,7 @@ begin
 	odata => m_MemDataFromMem
 	);
 	
---	RegPC <= m_PCFromReg;
+	RegPC <= m_PCFromReg;
 --	clk0 <= m_clk0;
 
 end Behavioral;
