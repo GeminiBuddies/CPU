@@ -32,23 +32,43 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity TopModule is
 	port(
 		--Debug		
-				Reg00 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg01 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg02 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg03 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg04 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg05 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg06 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg07 : out STD_LOGIC_VECTOR(15 downto 0);
-				IH : out STD_LOGIC_VECTOR(15 downto 0);
-				SP : out STD_LOGIC_VECTOR(15 downto 0);
-				RA : out STD_LOGIC_VECTOR(15 downto 0);
-				T : out STD_LOGIC_VECTOR(15 downto 0);
-				RegPC : out STD_LOGIC_VECTOR(15 downto 0);
-				
-				clk0 : out STD_LOGIC;
+--				Reg00 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg01 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg02 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg03 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg04 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg05 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg06 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg07 : out STD_LOGIC_VECTOR(15 downto 0);
+--				IH : out STD_LOGIC_VECTOR(15 downto 0);
+--				SP : out STD_LOGIC_VECTOR(15 downto 0);
+--				RA : out STD_LOGIC_VECTOR(15 downto 0);
+--				T : out STD_LOGIC_VECTOR(15 downto 0);
+--				RegPC : out STD_LOGIC_VECTOR(15 downto 0);
+--				
+--				clk0 : out STD_LOGIC;
 		--Debug
-	
+		
+		ram_addr: out std_logic_vector(17 downto 0) := (others => '0');
+		ram_data: inout std_logic_vector(15 downto 0);
+		ram_en: out std_logic;
+		ram_oe: out std_logic;
+		ram_we: out std_logic;
+		wrn: out std_logic;
+		tbre: in std_logic;
+		tsre: in std_logic;
+		rdn: out std_logic;
+		data_ready: in std_logic;
+		
+		-- flash bus
+		flash_byte: out std_logic; 
+		flash_vpen: out std_logic;
+		flash_ce: out std_logic; 
+		flash_oe: out std_logic; 
+		flash_we: out std_logic; 
+		flash_rp: out std_logic; 
+		flash_addr: out std_logic_vector(22 downto 1);
+		flash_data: inout std_logic_vector(15 downto 0);
 	
 		clk : in STD_LOGIC;
 		rst : in STD_LOGIC
@@ -135,18 +155,18 @@ architecture Behavioral of TopModule is
 	component RegisterGroup
 		Port ( 
 			  --Debug		
-				Reg00 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg01 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg02 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg03 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg04 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg05 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg06 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg07 : out STD_LOGIC_VECTOR(15 downto 0);
-				IH : out STD_LOGIC_VECTOR(15 downto 0);
-				SP : out STD_LOGIC_VECTOR(15 downto 0);
-				RA : out STD_LOGIC_VECTOR(15 downto 0);
-				T : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg00 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg01 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg02 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg03 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg04 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg05 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg06 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg07 : out STD_LOGIC_VECTOR(15 downto 0);
+--				IH : out STD_LOGIC_VECTOR(15 downto 0);
+--				SP : out STD_LOGIC_VECTOR(15 downto 0);
+--				RA : out STD_LOGIC_VECTOR(15 downto 0);
+--				T : out STD_LOGIC_VECTOR(15 downto 0);
 		--Debug
 				
 			  clk : in STD_LOGIC;
@@ -212,31 +232,31 @@ architecture Behavioral of TopModule is
 		);
 	end component;
 	
-	component mem
-		port(
-			clk0: in std_logic;
-			nclk0: in std_logic;
-			clk_wb: in std_logic;
-			nclk_wb: in std_logic;
-			ram_addr: out std_logic_vector(17 downto 0);
-			ram_data: inout std_logic_vector(15 downto 0);
-			ram_en: out std_logic;
-			ram_oe: out std_logic;
-			ram_we: out std_logic;
-			pc: in std_logic_vector(15 downto 0);
-			instr: out std_logic_vector(15 downto 0);
-			r: in std_logic;
-			w: in std_logic;
-			addr: in std_logic_vector(15 downto 0);
-			idata: in std_logic_vector(15 downto 0);
-			odata: out std_logic_vector(15 downto 0);
-			wrn: out std_logic;
-			tbre: in std_logic;
-			tsre: in std_logic;
-			rdn: out std_logic;
-			data_ready: in std_logic
-		);
-	end component;
+--	component mem
+--		port(
+--			clk0: in std_logic;
+--			nclk0: in std_logic;
+--			clk_wb: in std_logic;
+--			nclk_wb: in std_logic;
+--			ram_addr: out std_logic_vector(17 downto 0);
+--			ram_data: inout std_logic_vector(15 downto 0);
+--			ram_en: out std_logic;
+--			ram_oe: out std_logic;
+--			ram_we: out std_logic;
+--			pc: in std_logic_vector(15 downto 0);
+--			instr: out std_logic_vector(15 downto 0);
+--			r: in std_logic;
+--			w: in std_logic;
+--			addr: in std_logic_vector(15 downto 0);
+--			idata: in std_logic_vector(15 downto 0);
+--			odata: out std_logic_vector(15 downto 0);
+--			wrn: out std_logic;
+--			tbre: in std_logic;
+--			tsre: in std_logic;
+--			rdn: out std_logic;
+--			data_ready: in std_logic
+--		);
+--	end component;
 	
 	component splitter
 		port(
@@ -355,12 +375,57 @@ architecture Behavioral of TopModule is
 	
 	
 	
-	component memf
-		port(
-		clk0: in std_logic;
-		nclk0: in std_logic;
-		clk_wb: in std_logic;
-		nclk_wb: in std_logic;
+--	component memf
+--		port(
+--		clk0: in std_logic;
+--		nclk0: in std_logic;
+--		clk_wb: in std_logic;
+--		nclk_wb: in std_logic;
+--		pc: in std_logic_vector(15 downto 0);
+--		instr: out std_logic_vector(15 downto 0);
+--		r: in std_logic;
+--		w: in std_logic;
+--		addr: in std_logic_vector(15 downto 0);
+--		idata: in std_logic_vector(15 downto 0);
+--		odata: out std_logic_vector(15 downto 0)
+--		);
+--	end component;
+--	
+	component mem
+	port(
+		-- clock
+		clk: in std_logic;
+
+		-- clocks output
+		clk0: out std_logic := '0';
+		clk1: out std_logic := '0';
+		
+		-- ram and serial bus
+		ram_addr: out std_logic_vector(17 downto 0) := (others => '0');
+		ram_data: inout std_logic_vector(15 downto 0);
+		ram_en: out std_logic;
+		ram_oe: out std_logic;
+		ram_we: out std_logic;
+		wrn: out std_logic;
+		tbre: in std_logic;
+		tsre: in std_logic;
+		rdn: out std_logic;
+		data_ready: in std_logic;
+		
+		-- flash bus
+		flash_byte: out std_logic; 
+		flash_vpen: out std_logic; 
+		flash_ce: out std_logic; 
+		flash_oe: out std_logic; 
+		flash_we: out std_logic; 
+		flash_rp: out std_logic; 
+		flash_addr: out std_logic_vector(22 downto 1); 
+		flash_data: inout std_logic_vector(15 downto 0);
+			
+		-- debug output
+--		lcd: out std_logic_vector(15 downto 0);
+		
+		-- interface
 		pc: in std_logic_vector(15 downto 0);
 		instr: out std_logic_vector(15 downto 0);
 		r: in std_logic;
@@ -368,7 +433,7 @@ architecture Behavioral of TopModule is
 		addr: in std_logic_vector(15 downto 0);
 		idata: in std_logic_vector(15 downto 0);
 		odata: out std_logic_vector(15 downto 0)
-		);
+	);
 	end component;
 	
 	signal m_PCKeep: STD_LOGIC;
@@ -543,30 +608,28 @@ begin
 	
 	u10_RegisterGroup : RegisterGroup
 	PORT MAP(
-	Reg00,
-	Reg01,
-	Reg02,
-	Reg03,
-	Reg04,
-	Reg05,
-	Reg06,
-	Reg07,
-	IH,
-	SP,
-	RA,
-	T,
-	
-	
-	m_clk0,
-	m_Reg1DataFromRegs,
-	m_Reg2DataFromRegs,
-	m_WriteRegFromMEMWB,
-	m_WriteDataFromMux,
-	m_RegDstIndexFromMEMWB,
-	m_Reg1IndexFromMux,
-	m_Reg2IndexFromMux
+--	Reg00,
+--	Reg01,
+--	Reg02,
+--	Reg03,
+--	Reg04,
+--	Reg05,
+--	Reg06,
+--	Reg07,
+--	IH,
+--	SP,
+--	RA,
+--	T,	
+	clk => m_clk0,
+	Reg1Data => m_Reg1DataFromRegs,
+	Reg2Data => m_Reg2DataFromRegs,
+	WriteReg => m_WriteRegFromMEMWB,
+	WriteData => m_WriteDataFromMux,
+	DstReg => m_RegDstIndexFromMEMWB,
+	Reg1Index => m_Reg1IndexFromMux,
+	Reg2Index => m_Reg2IndexFromMux
 	);
-	
+
 	u11_ID_EXE_PILLAR : ID_EXE_PILLAR
 	PORT MAP(
 	m_clk0,
@@ -709,34 +772,34 @@ begin
 	m_WriteMemDataFromMux
 	);
 	
-	u21_splitter : splitter
-	PORT MAP(
-	clk,
-	rst,
-	m_clk0,
-	m_clk1,
-	m_clk2,
-	m_clk3,
-	m_nclk0,
-	m_nclk1,
-	m_nclk2,
-	m_nclk3
-	);
+--	u21_splitter : splitter
+--	PORT MAP(
+--	clk,
+--	rst,
+--	m_clk0,
+--	m_clk1,
+--	m_clk2,
+--	m_clk3,
+--	m_nclk0,
+--	m_nclk1,
+--	m_nclk2,
+--	m_nclk3
+--	);
 	
-	u22_memf : memf
-	PORT MAP(
-	m_clk0,
-	m_nclk0,
-	m_clk1,
-	m_nclk1,
-	m_PCFromReg,
-	m_InstructionFromMem,
-	m_MemReadFromEXEMEM,
-	m_MemWriteFromEXEMEM,
-	m_AluResFromEXEMEM,
-	m_WriteMemDataFromEXEMEM,
-	m_MemDataFromMem
-	);
+--	u22_memf : memf
+--	PORT MAP(
+--	m_clk0,
+--	m_nclk0,
+--	m_clk1,
+--	m_nclk1,
+--	m_PCFromReg,
+--	m_InstructionFromMem,
+--	m_MemReadFromEXEMEM,
+--	m_MemWriteFromEXEMEM,
+--	m_AluResFromEXEMEM,
+--	m_WriteMemDataFromEXEMEM,
+--	m_MemDataFromMem
+--	);
 	
 	u23_AluPCMux : AluPCMux
 	PORT MAP(
@@ -746,8 +809,43 @@ begin
 	m_AluSrc1
 	);
 	
-	RegPC <= m_PCFromReg;
-	clk0 <= m_clk0;
+	u24_mem : mem
+	PORT MAP(
+	clk => clk,
+	clk0 => m_clk0,
+	clk1 => m_clk1,
+	
+	ram_addr => ram_addr,
+	ram_data => ram_data,
+	ram_en => ram_en,
+	ram_oe => ram_oe,
+	ram_we => ram_we,
+	wrn => wrn,
+	tbre => tbre,
+	tsre => tsre,
+	rdn => rdn,
+	data_ready => data_ready,
+	
+	flash_byte => flash_byte,
+	flash_vpen => flash_vpen,
+	flash_ce => flash_ce,
+	flash_oe => flash_oe,
+	flash_we => flash_we,
+	flash_rp => flash_rp,
+	flash_addr => flash_addr,
+	flash_data => flash_data,
+	
+	pc => m_PCFromReg,
+	instr => m_InstructionFromMem,
+	r => m_MemReadFromEXEMEM,
+	w => m_MemWriteFromEXEMEM,
+	addr => m_AluResFromEXEMEM,
+	idata => m_WriteMemDataFromEXEMEM,
+	odata => m_MemDataFromMem
+	);
+	
+--	RegPC <= m_PCFromReg;
+--	clk0 <= m_clk0;
 
 end Behavioral;
 

@@ -32,20 +32,20 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 
 entity RegisterGroup is
     Port ( 
-		--Debug		
-				Reg00 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg01 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg02 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg03 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg04 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg05 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg06 : out STD_LOGIC_VECTOR(15 downto 0);
-				Reg07 : out STD_LOGIC_VECTOR(15 downto 0);
-				IH : out STD_LOGIC_VECTOR(15 downto 0);
-				SP : out STD_LOGIC_VECTOR(15 downto 0);
-				RA : out STD_LOGIC_VECTOR(15 downto 0);
-				T : out STD_LOGIC_VECTOR(15 downto 0);
-		--Debug
+--		--Debug		
+--				Reg00 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg01 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg02 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg03 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg04 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg05 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg06 : out STD_LOGIC_VECTOR(15 downto 0);
+--				Reg07 : out STD_LOGIC_VECTOR(15 downto 0);
+--				IH : out STD_LOGIC_VECTOR(15 downto 0);
+--				SP : out STD_LOGIC_VECTOR(15 downto 0);
+--				RA : out STD_LOGIC_VECTOR(15 downto 0);
+--				T : out STD_LOGIC_VECTOR(15 downto 0);
+--		--Debug
 	 
 	 
 			  clk : in STD_LOGIC;
@@ -65,18 +65,18 @@ x"0008",x"0009",x"000A",x"000B",x"000C",x"000D",x"000E",x"000F");
 
 begin
 
-Reg00 <= RegGroup(0);
-Reg01 <= RegGroup(1);
-Reg02 <= RegGroup(2);
-Reg03 <= RegGroup(3);
-Reg04 <= RegGroup(4);
-Reg05 <= RegGroup(5);
-Reg06 <= RegGroup(6);
-Reg07 <= RegGroup(7);
-IH <= RegGroup(9);
-SP <= RegGroup(8);
-T <= RegGroup(11);
-RA <= RegGroup(10);
+--Reg00 <= RegGroup(0);
+--Reg01 <= RegGroup(1);
+--Reg02 <= RegGroup(2);
+--Reg03 <= RegGroup(3);
+--Reg04 <= RegGroup(4);
+--Reg05 <= RegGroup(5);
+--Reg06 <= RegGroup(6);
+--Reg07 <= RegGroup(7);
+--IH <= RegGroup(9);
+--SP <= RegGroup(8);
+--T <= RegGroup(11);
+--RA <= RegGroup(10);
 
 process(WriteReg, WriteData, DstReg)
 begin
