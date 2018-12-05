@@ -159,25 +159,29 @@ begin
 				when S_FLASH_NOP1 =>
 					status <= S_FLASH;
 				when S_IF_B =>
+					ram_en <= '1'; ram_oe <= '1'; ram_we <= '1';
+					wrn <= '1'; rdn <= '1';
+					clk0 <= '1'; clk1 <= '0';
+					
+					status <= S_IF_E;
+				when S_IF_E =>
 					ram_en <= '0'; ram_oe <= '0'; ram_we <= '1';
 					wrn <= '1'; rdn <= '1';
 					clk0 <= '0'; clk1 <= '0';
-					
+
 					ram_addr <= "00" & pc;
 					ram_data <= (others => 'Z');
 
-					status <= S_IF_E;
-				when S_IF_E =>
-					ram_en <= '0'; ram_oe <= '1'; ram_we <= '1';
-					wrn <= '1'; rdn <= '1';
-					clk0 <= '1'; clk1 <= '0';
-
-					-- instr <= ram_data; moved to falling edge
-
 					status <= S_MEM_B;
 				when S_MEM_B =>
+					ram_en <= '1'; ram_oe <= '1'; ram_we <= '1';
+					wrn <= '1'; rdn <= '1';
 					clk0 <= '0'; clk1 <= '1';
 
+					status <= S_MEM_E;
+				when S_MEM_E =>
+					clk0 <= '0'; clk1 <= '0';
+					
 					if addr = x"BF00" then
 						ram_en <= '1'; ram_oe <= '1'; ram_we <= '1';
 						if w = '1' then
@@ -204,26 +208,6 @@ begin
 						end if;
 					end if;
 
-					status <= S_MEM_E;
-				when S_MEM_E =>
-					ram_en <= '1'; ram_oe <= '1'; ram_we <= '1';
-					wrn <= '1'; rdn <= '1';
-					clk0 <= '0'; clk1 <= '0';
-					
-					if addr = x"BF00" then
-						if r = '1' then
-							odata <= ram_data;
-						end if;
-					elsif addr = x"BF01" then
-						if r = '1' then
-							odata <= (0 => tsre, 1 => data_ready, others => '0');
-						end if;
-					else
-						if r = '1' then
-							odata <= ram_data;
-						end if;
-					end if;
-
 					status <= S_IF_B;
 			end case;
 		end if;
@@ -232,8 +216,23 @@ begin
 	process(clk)
 	begin
 		if falling_edge(clk) then
-			if status = S_IF_B then
+			if status = S_MEM_B then
 				instr <= ram_data;
+			elsif status = S_IF_B then
+				if addr = x"BF00" then
+					if r = '1' then
+						odata <= ram_data;
+					end if;
+				elsif addr = x"BF01" then
+					if r = '1' then
+						odata <= (0 => tsre and tbre, 1 => data_ready, 2 => tbre, others => '0');
+						--odata <= (0 => '1', 1 => data_ready, others => '0');
+					end if;
+				else
+					if r = '1' then
+						odata <= ram_data;
+					end if;
+				end if;
 			end if;	
 		end if;
 	end process;

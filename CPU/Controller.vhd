@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Controller is
     port ( AluOp : out  STD_LOGIC_VECTOR (3 downto 0);
-           Instruction : in  STD_LOGIC_VECTOR (15 downto 0);
+           Instruction : in  STD_LOGIC_VECTOR (15 downto 0):=x"0800";
            SignExtend : out  STD_LOGIC;
            ImmOrReg2 : out  STD_LOGIC;
            MemRead : out  STD_LOGIC;

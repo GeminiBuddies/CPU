@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-entity memfuck is
+entity mem is
 	port(
 		-- clock
 		clk: in std_logic;
@@ -24,9 +24,9 @@ entity memfuck is
 		idata: in std_logic_vector(15 downto 0);
 		odata: out std_logic_vector(15 downto 0)
 	);
-end memfuck;
+end mem;
 
-architecture memX of memfuck is
+architecture memX of mem is
 	type STATUS_T is ( S_IF_B, S_IF_E, S_MEM_B, S_MEM_E );
 
 	signal status: STATUS_T := S_IF_B;
