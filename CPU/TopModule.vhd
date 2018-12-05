@@ -373,6 +373,13 @@ architecture Behavioral of TopModule is
 		);
 	end component;
 	
+	component fucker
+		port(
+			iclk: in std_logic;
+			oclk: out std_logic := '0'
+		);
+	end component;
+	
 	
 	
 --	component memf
@@ -522,89 +529,95 @@ architecture Behavioral of TopModule is
 	signal m_nclk2 : STD_LOGIC;
 	signal m_nclk3 : STD_LOGIC;
 	
+	signal m_FuckerClk : STD_LOGIC;
+	
 	
 	
 	
 begin
 	u1_PC : PC
 	PORT MAP(
-	m_clk0, 
-	m_PCKeep,
-	m_PCFromMux, 
-	m_PCFromReg);
+	clk => m_clk0, 
+	PCKeep => m_PCKeep,
+	PCIn => m_PCFromMux, 
+	PCOut => m_PCFromReg);
 	
 	
 	u2_PCAdder : PCAdder
 	PORT MAP(
-	m_PCFromReg,
-	m_PCFromAdder);
-	
+	PC => m_PCFromReg,
+	AddedPC => m_PCFromAdder);
+
 	
 	u3_PCMux : PCMux 
 	PORT MAP(
-	m_PCChoose, 
-	m_PCFromAdder,
-	m_ForwardA,
-	m_CondJumpDst,
-	m_PCFromMux);
+	PCChoose => m_PCChoose, 
+	AddedPC => m_PCFromAdder,
+	RegJump => m_ForwardA,
+	ConditionalJump => m_CondJumpDst,
+	NextPC => m_PCFromMux);
 	
 	
 	u4_IF_ID_PILLAR : IF_ID_PILLAR 
 	PORT MAP(
-	m_clk0, 
-	m_IFIDKeep, 
-	m_IFIDFlush, 
-	m_PCFromAdder, 
-	m_PCFromIFID,
-	m_InstructionFromIFID, 
-	m_InstructionFromMem); 
+	clk => m_clk0, 
+	IFIDKeep => m_IFIDKeep, 
+	IFIDFlush => m_IFIDFlush, 
+	PCIn => m_PCFromAdder, 
+	PCOut => m_PCFromIFID,
+	InstructionOut => m_InstructionFromIFID, 
+	InstructionIn => m_InstructionFromMem); 
 	
 	
 	u5_Controller : Controller 
 	PORT MAP(
-	m_AluOpFromController, 
-	m_InstructionFromIFID, 
-	m_SignExtend, 
-	m_ImmOrReg2FromController, 
-	m_MemReadFromController,
-	m_MemWriteFromController,
-	m_WriteRegFromController,
-	m_UsePCFromController,
-	m_Reg1Choose,
-	m_Reg2Choose,
-	m_ImmChoose,
-	m_RegDstChoose,
-	m_HazardKindFromController,
-	m_MemOrAluFromController);
+	AluOp => m_AluOpFromController, 
+	Instruction => m_InstructionFromIFID, 
+	SignExtend => m_SignExtend, 
+	ImmOrReg2 => m_ImmOrReg2FromController, 
+	MemRead => m_MemReadFromController,
+	MemWrite => m_MemWriteFromController,
+	WriteReg => m_WriteRegFromController,
+	UsePc => m_UsePCFromController,
+	Reg1Choose => m_Reg1Choose,
+	Reg2Choose => m_Reg2Choose,
+	ImmChoose => m_ImmChoose,
+	RegDstChoose => m_RegDstChoose,
+	HazardKind => m_HazardKindFromController,
+	MemOrAlu => m_MemOrAluFromController);
+	
 	
 	u6_Reg1Mux : Reg1Mux		--reg1mux
 	PORT MAP(
-	m_Reg1Choose,
-	m_InstructionFromIFID,
-	m_Reg1IndexFromMux
+	Reg1Choose => m_Reg1Choose,
+	Instruction => m_InstructionFromIFID,
+	Reg1Index => m_Reg1IndexFromMux
 	);
+	
 	
 	u7_RegDstMux : Reg1Mux 		--regDstMux
 	PORT MAP(
-	m_RegDstChoose,
-	m_InstructionFromIFID,
-	m_RegDstIndexFromMux
+	Reg1Choose => m_RegDstChoose,
+	Instruction => m_InstructionFromIFID,
+	Reg1Index => m_RegDstIndexFromMux
 	);
 	
 	u8_Reg2Mux : Reg2Mux 		
 	PORT MAP(
-	m_InstructionFromIFID,
-	m_Reg2Choose,
-	m_Reg2IndexFromMux
+	Instruction => m_InstructionFromIFID,
+	Reg2Choose => m_Reg2Choose,
+	Reg2Index => m_Reg2IndexFromMux
 	);
+
 	
 	u9_ImmediateMux : ImmediateMux
 	PORT MAP(
-	m_InstructionFromIFID,
-	m_SignExtend,
-	m_ImmChoose,
-	m_ImmFromMux
+	Instruction => m_InstructionFromIFID,
+	SignExtend => m_SignExtend,
+	ImmChoose => m_ImmChoose,
+	ExtendedImm => m_ImmFromMux
 	);
+	
 	
 	u10_RegisterGroup : RegisterGroup
 	PORT MAP(
@@ -632,144 +645,145 @@ begin
 
 	u11_ID_EXE_PILLAR : ID_EXE_PILLAR
 	PORT MAP(
-	m_clk0,
-	m_PCFromIFID,
-	m_PCFromIDEXE,
-	m_AluOpFromController,
-	m_AluOpFromIDEXE,
-	m_ImmOrReg2FromController,
-	m_ImmOrReg2FromIDEXE,
-	m_UsePCFromController,
-	m_UsePCFromIDEXE,
-	m_Reg1DataFromRegs,
-	m_Reg1DataFromIDEXE,
-	m_Reg2DataFromRegs,
-	m_Reg2DataFromIDEXE,
-	m_ImmFromMux,
-	m_ImmFromIDEXE,
-	m_Reg1IndexFromMux,
-	m_Reg1IndexFromIDEXE,
-	m_Reg2IndexFromMux,
-	m_Reg2IndexFromIDEXE,
-	m_RegDstIndexFromMux,
-	m_RegDstIndexFromIDEXE,
-	m_HazardKindFromController,
-	m_HazardKindFromIDEXE,
-	m_MemReadFromController,
-	m_MemReadFromIDEXE,
-	m_MemWriteFromController,
-	m_MemWriteFromIDEXE,
-	m_WriteRegFromController,
-	m_WriteRegFromIDEXE,
-	m_MemOrAluFromController,
-	m_MemOrAluFromIDEXE,
-	m_IDEXEFlush
+	clk => m_clk0,
+	PCIn => m_PCFromIFID,
+	PCOut => m_PCFromIDEXE,
+	AluOpIn => m_AluOpFromController,
+	AluOpOut => m_AluOpFromIDEXE,
+	ImmOrReg2In => m_ImmOrReg2FromController,
+	ImmOrReg2Out => m_ImmOrReg2FromIDEXE,
+	UsePcIn => m_UsePCFromController,
+	UsePcOut => m_UsePCFromIDEXE,
+	Reg1DataIn => m_Reg1DataFromRegs,
+	Reg1DataOut => m_Reg1DataFromIDEXE,
+	Reg2DataIn => m_Reg2DataFromRegs,
+	Reg2DataOut => m_Reg2DataFromIDEXE,
+	ImmIn => m_ImmFromMux,
+	ImmOut => m_ImmFromIDEXE,
+	Reg1IndexIn => m_Reg1IndexFromMux,
+	Reg1IndexOut => m_Reg1IndexFromIDEXE,
+	Reg2IndexIn => m_Reg2IndexFromMux,
+	Reg2IndexOut => m_Reg2IndexFromIDEXE,
+	DstIndexIn => m_RegDstIndexFromMux,
+	DstIndexOut => m_RegDstIndexFromIDEXE,
+	HazardKindIn => m_HazardKindFromController,
+	HazardKindOut => m_HazardKindFromIDEXE,
+	MemReadIn => m_MemReadFromController,
+	MemReadOut => m_MemReadFromIDEXE,
+	MemWriteIn => m_MemWriteFromController,
+	MemWriteOut => m_MemWriteFromIDEXE,
+	WriteRegIn => m_WriteRegFromController,
+	WriteRegOut => m_WriteRegFromIDEXE,
+	MemOrAluIn => m_MemOrAluFromController,
+	MemOrAluOut => m_MemOrAluFromIDEXE,
+	IDEXEFlush => m_IDEXEFlush
 	);
+	
 	
 	u12_HazardDetection : HazardDetection
 	PORT MAP(
-	m_RegDstIndexFromIDEXE,
-	m_Reg1IndexFromMux,
-	m_Reg2IndexFromMux,
-	m_HazardKindFromIDEXE,
-	m_AluResFromAlu,
-	m_PCKeep,
-	m_IFIDKeep,
-	m_IFIDFlush,
-	m_IDEXEFlush,
-	m_PCChoose
+	LoadDst => m_RegDstIndexFromIDEXE,
+	RegSrc1 => m_Reg1IndexFromMux,
+	RegSrc2 => m_Reg2IndexFromMux,
+	HazardKind => m_HazardKindFromIDEXE,
+	AluRes => m_AluResFromAlu,
+	PCKeep => m_PCKeep,
+	IFIDKeep => m_IFIDKeep,
+	IFIDFlush => m_IFIDFlush,
+	IDEXEFlush => m_IDEXEFlush,
+	PCChoose => m_PCChoose
 	);
 	
 	u13_CPU_ADDER : CPU_ADDER
 	PORT MAP(
-	m_PCFromIDEXE,
-	m_ImmFromIDEXE,
-	m_CondJumpDst
+	PC => m_PCFromIDEXE,
+	Imm => m_ImmFromIDEXE,
+	result => m_CondJumpDst
 	);
 	
 	u14_CPU_FORWARD_SRCA : CPU_FORWARD_SRCA
 	PORT MAP(
-	m_Reg1DataFromIDEXE,
-	m_Reg1IndexFromIDEXE,
-	m_AluResFromEXEMEM,
-	m_RegDstIndexFromEXEMEM,
-	m_AluResFromMEMWB,
-	m_RegDstIndexFromMEMWB,
-	m_ForwardA
+	origin_data => m_Reg1DataFromIDEXE,
+	r_src => m_Reg1IndexFromIDEXE,
+	exe_mem_data => m_AluResFromEXEMEM,
+	exe_mem_r_dst => m_RegDstIndexFromEXEMEM,
+	mem_wb_data => m_AluResFromMEMWB,
+	mem_wb_r_dst => m_RegDstIndexFromMEMWB,
+	result => m_ForwardA
 	);
 	
 	u15_CPU_FORWARD_SRCB : CPU_FORWARD_SRCB
 	PORT MAP(
-	m_ImmFromIDEXE,
-	m_Reg2DataFromIDEXE,
-	m_ImmOrReg2FromIDEXE,
-	m_Reg2IndexFromIDEXE,
-	m_AluResFromEXEMEM,
-	m_RegDstIndexFromEXEMEM,
-	m_AluResFromMEMWB,
-	m_RegDstIndexFromMEMWB,
-	m_AluSrc2
+	imm => m_ImmFromIDEXE,
+	origin_r_data => m_Reg2DataFromIDEXE,
+	imm_or_r => m_ImmOrReg2FromIDEXE,
+	r_src => m_Reg2IndexFromIDEXE,
+	exe_mem_data => m_AluResFromEXEMEM,
+	exe_mem_r_dst => m_RegDstIndexFromEXEMEM,
+	mem_wb_data => m_AluResFromMEMWB,
+	mem_wb_r_dst => m_RegDstIndexFromMEMWB,
+	result => m_AluSrc2
 	);
 	
 	u16_CPU_ALU : CPU_ALU
 	PORT MAP(
-	m_AluSrc1,
-	m_AluSrc2,
-	m_AluOpFromIDEXE,
-	m_AluResFromAlu
+	srcA => m_AluSrc1,
+	srcB => m_AluSrc2,
+	op => m_AluOpFromIDEXE,
+	result => m_AluResFromAlu
 	);
 	
 	u17_EXE_MEM_PILLAR : EXE_MEM_PILLAR
 	PORT MAP(
-	m_clk0,
-	m_MemReadFromIDEXE,
-	m_MemReadFromEXEMEM,
-	m_MemWriteFromIDEXE,
-	m_MemWriteFromEXEMEM,
-	m_AluResFromAlu,
-	m_AluResFromEXEMEM,
-	m_WriteMemDataFromMux,
-	m_WriteMemDataFromEXEMEM,
-	m_RegDstIndexFromIDEXE,
-	m_RegDstIndexFromEXEMEM,
-	m_MemOrAluFromIDEXE,
-	m_MemOrAluFromEXEMEM,
-	m_WriteRegFromIDEXE,
-	m_WriteRegFromEXEMEM
+	clk => m_clk0,
+	MemReadIn => m_MemReadFromIDEXE,
+	MemReadOut => m_MemReadFromEXEMEM,
+	MemWriteIn => m_MemWriteFromIDEXE,
+	MemWriteOut => m_MemWriteFromEXEMEM,
+	AluResultIn => m_AluResFromAlu,
+	AluResultOut => m_AluResFromEXEMEM,
+	WriteDataIn => m_WriteMemDataFromMux,
+	WriteDataOut => m_WriteMemDataFromEXEMEM,
+	DstIndexIn => m_RegDstIndexFromIDEXE,
+	DstIndexOut => m_RegDstIndexFromEXEMEM,
+	MemOrAluIn => m_MemOrAluFromIDEXE,
+	MemOrAluOut => m_MemOrAluFromEXEMEM,
+	WriteRegIn => m_WriteRegFromIDEXE,
+	WriteRegOut => m_WriteRegFromEXEMEM
 	);
 	
 	u18_MEM_WB_PILLAR : MEM_WB_PILLAR
 	PORT MAP(
-	m_MemOrAluFromEXEMEM,
-	m_WriteRegFromEXEMEM,
-	m_RegDstIndexFromEXEMEM,
-	m_MemDataFromMem,
-	m_AluResFromEXEMEM,
-	m_MemOrAluFromMEMWB,
-	m_WriteRegFromMEMWB,
-	m_RegDstIndexFromMEMWB,
-	m_MemDataFromMEMWB,
-	m_AluResFromMEMWB,
-	m_clk0
+	mem_or_alu_in => m_MemOrAluFromEXEMEM,
+	write_reg_in => m_WriteRegFromEXEMEM,
+	reg_dst_in => m_RegDstIndexFromEXEMEM,
+	mem_data_in => m_MemDataFromMem,
+	alu_data_in => m_AluResFromEXEMEM,
+	mem_or_alu_out => m_MemOrAluFromMEMWB,
+	write_reg_out => m_WriteRegFromMEMWB,
+	reg_dst_out => m_RegDstIndexFromMEMWB,
+	mem_data_out => m_MemDataFromMEMWB,
+	alu_data_out => m_AluResFromMEMWB,
+	clk => m_clk0
 	);
 	
 	u19_WBMux : WBMux
 	PORT MAP(
-	m_WriteDataFromMux,
-	m_MemDataFromMEMWB,
-	m_AluResFromMEMWB,
-	m_MemOrAluFromMEMWB
+	output => m_WriteDataFromMux,
+	memdata => m_MemDataFromMEMWB,
+	aludata => m_AluResFromMEMWB,
+	mem_or_alu => m_MemOrAluFromMEMWB
 	);
 	
 	u20_CPU_FORWARD_SRCC : CPU_FORWARD_SRCC
 	PORT MAP(
-	m_Reg2DataFromIDEXE,
-	m_Reg2IndexFromIDEXE,
-	m_AluResFromEXEMEM,
-	m_RegDstIndexFromEXEMEM,
-	m_AluResFromMEMWB,
-	m_RegDstIndexFromMEMWB,
-	m_WriteMemDataFromMux
+	origin_data => m_Reg2DataFromIDEXE,
+	r_src => m_Reg2IndexFromIDEXE,
+	exe_mem_data => m_AluResFromEXEMEM,
+	exe_mem_r_dst => m_RegDstIndexFromEXEMEM,
+	mem_wb_data => m_AluResFromMEMWB,
+	mem_wb_r_dst => m_RegDstIndexFromMEMWB,
+	result => m_WriteMemDataFromMux
 	);
 	
 --	u21_splitter : splitter
@@ -803,15 +817,15 @@ begin
 	
 	u23_AluPCMux : AluPCMux
 	PORT MAP(
-	m_UsePCFromIDEXE,
-	m_PCFromIDEXE,
-	m_ForwardA,
-	m_AluSrc1
+	UsePC => m_UsePCFromIDEXE,
+	PC => m_PCFromIDEXE,
+	ForwardAData => m_ForwardA,
+	AluSrc1 => m_AluSrc1
 	);
 	
 	u24_mem : mem
 	PORT MAP(
-	clk => clk,
+	clk => m_FuckerClk,
 	clk0 => m_clk0,
 	clk1 => m_clk1,
 	
@@ -842,6 +856,12 @@ begin
 	addr => m_AluResFromEXEMEM,
 	idata => m_WriteMemDataFromEXEMEM,
 	odata => m_MemDataFromMem
+	);
+	
+	u25_fucker : fucker
+	PORT MAP(
+	iclk => clk,
+	oclk => m_FuckerClk
 	);
 	
 	RegPC <= m_PCFromReg;

@@ -15,7 +15,7 @@ end WBMux;
 
 architecture WBMuxX of WBMux is
 begin
-	process(memdata, aludata)
+	process(memdata, aludata, mem_or_alu)
 	begin
 		if mem_or_alu = '1' then
 			output <= memdata;
