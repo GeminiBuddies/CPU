@@ -83,7 +83,7 @@ ARCHITECTURE behavior OF TMTest IS
 	signal clk0 : STD_LOGIC;
 
    -- Clock period definitions
-   constant clk_period : time := 2000 ns;
+   constant clk_period : time := 20 ns;
  
 BEGIN
  
